@@ -15,39 +15,45 @@ const state = {
     {
       wordId: 0,
       word: 'policy',
-      kkPhoneticSymbols: '[`]',
+      kkPhoneticSymbols: '`pɑləsɪ',
       partOfSpeech: 'n.',
       chinese: '政策, 規定; 保險單',
-      derivation: [
-        { derivation: '', derivationChinese: '' },
-      ],
-      synonym: [
-        { synonym: '', synonymChinese: '' },
-      ],
-      antonym: [
-        { antonym: '', antonymChinese: '' },
-      ],
+      derivations: [],
+      synonyms: [],
+      antonyms: [],
       sentences: [
-        { sentences: '', sentencesChinese: '' },
+        {
+          sentence: 'The employee benefit policy will be expanded next year.',
+          sentenceChinese: '員工福利政策明年將會擴大。',
+        },
+        {
+          sentence: 'Companies must distribute health insurance policies to all workers.',
+          sentenceChinese: '公司應該將健康保險單發給所有員工。',
+        },
+
       ],
     },
     {
       wordId: 1,
       word: 'comply',
-      kkPhoneticSymbols: '[`]',
+      kkPhoneticSymbols: 'kk音標',
       partOfSpeech: 'v.',
       chinese: '遵守, 遵從',
-      derivation: [
-        { derivation: '', derivationChinese: '' },
+      derivations: [
+        {
+          derivation: 'compliance',
+          partOfSpeech: 'n.',
+          derivationChinese: '遵守',
+        },
       ],
-      synonym: [
-        { synonym: '', synonymChinese: '' },
-      ],
-      antonym: [
-        { antonym: '', antonymChinese: '' },
-      ],
+      synonyms: [],
+      antonyms: [],
       sentences: [
-        { sentences: '', sentencesChinese: '' },
+        {
+          sentence: 'Employees must comply with the regulations governing computer use.',
+          sentenceChinese: '員工必須遵守管理電腦使用的規定',
+        },
+
       ],
     },
   ],
@@ -78,10 +84,9 @@ const mutations = {
   // 新增
   [types.CREATE_WORD](state, newWord) {
     // 自動編號 Id
-    let wordId = state.words.length;
-    debugger;
+    // let wordId = state.words.length;
     state.words.push(newWord);
-    wordId += 1;
+    // wordId += 1;
   },
 
   // 刪除
