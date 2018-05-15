@@ -160,6 +160,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import Noty from 'noty';
 import { mapGetters, mapActions } from 'vuex';
 import 'animate.css';
@@ -211,7 +212,7 @@ export default {
         text: '儲存中...',
       }).show();
 
-      this.$store.dispatch('createWord', this.word)
+      this.$store.dispatch('createWord', _.cloneDeep(this.word))
         .then(() => {
           // 新增成功
           noty.close();

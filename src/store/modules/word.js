@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 /*
   這邊可以改為用 types 物件取代 matutions_type.js (繼續用也可以)
   然後在前面加上模組名稱作為前綴，用來避免與其他模組重複。
@@ -61,7 +63,10 @@ const state = {
       ],
     },
   ],
+  originalWords: _.cloneDeep(this.words), // horseTODO: 還不算太搞清楚物件內怎麼讀取自己?
 };
+
+state.originalWords = _.cloneDeep(state.words);
 
 // getters 整理到這邊直接返回 count 內容
 const getters = {
@@ -76,6 +81,26 @@ const actions = {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (newTodo) {
+          newTodo.sentences.forEach((sentence, index, object) => {
+            if (!sentence.sentence) {
+              object.splice(index, 1);
+            }
+          });
+          newTodo.derivations.forEach((derivation, index, object) => {
+            if (!derivation.derivation) {
+              object.splice(index, 1);
+            }
+          });
+          newTodo.synonyms.forEach((synonym, index, object) => {
+            if (!synonym.synonym) {
+              object.splice(index, 1);
+            }
+          });
+          newTodo.antonyms.forEach((antonym, index, object) => {
+            if (!antonym.antonym) {
+              object.splice(index, 1);
+            }
+          });
           commit(types.CREATE_WORD, newTodo);
           resolve();
         } else {

@@ -89,10 +89,10 @@
         </div>
       </div>
       <div v-if="!viewMode" class="col-md-1">
-        <button type="button" class="btn btn-outline-primary">
+        <button type="button" class="btn btn-sm btn-outline-primary">
           <span class="oi oi-circle-check" aria-hidden="true"></span> 編輯
         </button>
-        <button type="button" class="btn btn-outline-danger">
+        <button type="button" class="btn btn-sm btn-outline-danger">
           <span class="oi oi-circle-check" aria-hidden="true"></span> 刪除
         </button>
       </div>
