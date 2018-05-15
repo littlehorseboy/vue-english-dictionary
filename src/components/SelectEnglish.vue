@@ -46,20 +46,15 @@
     </div>
     <hr>
 
-    <div class="row">
-      <div class="col">
-        <h4>自建字庫</h4>
-      </div>
-      <div class="col">
-        <div class="onoffswitch">
-          <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
-          <label class="onoffswitch-label" for="myonoffswitch">
-            <span class="onoffswitch-inner"></span>
-            <span class="onoffswitch-switch"></span>
-          </label>
-        </div>
-      </div>
+    <div class="onoffswitch" style="float: right;">
+      <input v-model="viewMode" type="checkbox" class="onoffswitch-checkbox" id="myonoffswitch">
+      <label class="onoffswitch-label" for="myonoffswitch">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+      </label>
     </div>
+
+    <h4 class="clear">自建字庫</h4>
     <div v-for="word in words" :key="word.wordId" class="row mb-4">
       <div class="col-md-3">
         <div class="h5 text-success">{{ word.word }}</div>
@@ -83,7 +78,7 @@
           <small>{{ antonym.antonymChinese }}</small>
         </div>
       </div>
-      <div class="col-md-9">
+      <div :class="[viewMode ? 'col-md-9' : 'col-md-8']">
         <div>
           <span class="font-weight-bold">{{ word.partOfSpeech }}</span>
           <span class="font-weight-bold">{{ word.chinese }}</span>
@@ -92,6 +87,14 @@
             <div>{{ sentence.sentenceChinese }}</div>
           </div>
         </div>
+      </div>
+      <div v-if="!viewMode" class="col-md-1">
+        <button type="button" class="btn btn-outline-primary">
+          <span class="oi oi-circle-check" aria-hidden="true"></span> 編輯
+        </button>
+        <button type="button" class="btn btn-outline-danger">
+          <span class="oi oi-circle-check" aria-hidden="true"></span> 刪除
+        </button>
       </div>
     </div>
     <pre>{{ words }}</pre>
@@ -105,6 +108,7 @@ export default {
   name: 'InsertEnglish',
   data() {
     return {
+      viewMode: true,
     };
   },
   computed: {
@@ -122,42 +126,65 @@ export default {
 
 <style scoped>
   .onoffswitch {
-    position: sticky; top: 10px; width: 90px;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+    position: sticky;
+    top: 10px;
+    width: 90px;
+    user-select: none;
   }
   .onoffswitch-checkbox {
-      display: none;
+    display: none;
   }
   .onoffswitch-label {
-      display: block; overflow: hidden; cursor: pointer;
-      border: 2px solid #999999; border-radius: 20px;
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid #999999;
+    border-radius: 20px;
+    margin-bottom: 0;
   }
   .onoffswitch-inner {
-      display: block; width: 200%; margin-left: -100%;
+      display: block;
+      width: 200%;
+      margin-left: -100%;
       transition: margin 0.3s ease-in 0s;
   }
   .onoffswitch-inner:before, .onoffswitch-inner:after {
-      display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
-      font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+      display: block;
+      float: left;
+      width: 50%;
+      height: 30px;
+      padding: 0;
+      line-height: 30px;
+      font-size: 14px;
+      color: white;
+      font-family: Trebuchet, Arial, sans-serif;
+      font-weight: bold;
       box-sizing: border-box;
   }
   .onoffswitch-inner:before {
       content: "檢視";
       padding-left: 10px;
-      background-color: #35943D; color: #FFFFFF;
+      background-color: #35943D;
+      color: #FFFFFF;
   }
   .onoffswitch-inner:after {
       content: "編輯";
       padding-right: 10px;
-      background-color: #F07878; color: #FCE8E8;
+      background-color: #F07878;
+      color: #FCE8E8;
       text-align: right;
   }
   .onoffswitch-switch {
-      display: block; width: 22px; margin: 6px;
+      display: block;
+      width: 22px;
+      margin: 6px;
       background: #F5F5F5;
-      position: absolute; top: 0; bottom: 0;
+      position: absolute;
+      top: 0;
+      bottom: 0;
       right: 56px;
-      border: 2px solid #999999; border-radius: 20px;
+      border: 2px solid #999999;
+      border-radius: 20px;
       transition: all 0.3s ease-in 0s;
   }
   .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
