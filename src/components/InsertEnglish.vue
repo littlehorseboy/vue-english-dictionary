@@ -12,7 +12,8 @@
         <div class="mt-2">
           <small>
             <label for="insertKKPhoneticSymbols">K.K.phonetic symbols</label>
-            <input v-model="word.kkPhoneticSymbols" class="form-control form-control-sm" id="insertKKPhoneticSymbols" placeholder="K.K.音標" value="æp(ə)l">
+            <input v-model="word.kkPhoneticSymbols" class="form-control form-control-sm"
+              id="insertKKPhoneticSymbols" placeholder="K.K.音標" value="æp(ə)l">
           </small>
         </div>
         <!-- end K.K.音標 -->
@@ -117,11 +118,55 @@
       </div>
     </div>
     <button @click="createWord" class="btn btn-primary">新增</button>
+
+    <hr class="mt-5">
+    <h4>預覽</h4>
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="h5 text-success">{{ word.word }}</div>
+        <div>[{{ word.kkPhoneticSymbols }}]</div>
+        <div v-for="(derivation, index) in word.derivations" :key="`derivation_${index}`">
+          <small class="border border-success">衍</small>
+          <small>{{ derivation.derivation }}</small>
+          <small>{{ derivation.partOfSpeech }}</small>
+          <small>{{ derivation.derivationChinese }}</small>
+        </div>
+        <div v-for="(synonym, index) in word.synonyms" :key="`synonym_${index}`">
+          <small class="border border-success">同</small>
+          <small>{{ synonym.synonym }}</small>
+          <small>{{ synonym.partOfSpeech }}</small>
+          <small>{{ synonym.synonymChinese }}</small>
+        </div>
+        <div v-for="(antonym, index) in word.antonyms" :key="`antonym_${index}`">
+          <small class="border border-success">反</small>
+          <small>{{ antonym.antonym }}</small>
+          <small>{{ antonym.partOfSpeech }}</small>
+          <small>{{ antonym.antonymChinese }}</small>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <div>
+          <span class="font-weight-bold">{{ word.partOfSpeech }}</span>
+          <span class="font-weight-bold">{{ word.chinese }}</span>
+          <div v-for="(sentence, index) in word.sentences" :key="index">
+            <div>{{ sentence.sentence }}</div>
+            <div>{{ sentence.sentenceChinese }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <pre>{{ word }}</pre>
   </div>
 </template>
 
 <script>
+import Noty from 'noty';
 import { mapGetters, mapActions } from 'vuex';
+import 'animate.css';
+import 'noty/src/noty.scss';
+import 'noty/src/themes/relax.scss';
+
+const uuidv1 = require('uuid/v1');
 
 export default {
   name: 'InsertEnglish',
@@ -135,62 +180,95 @@ export default {
         chinese: '政策, 規定; 保險單',
         // 衍生詞
         derivations: [
-          { derivation: '', partOfSpeech: '', derivationChinese: '' },
+          { derivationId: uuidv1(), derivation: '', partOfSpeech: '', derivationChinese: '' },
         ],
         // 同義詞
         synonyms: [
-          { synonym: '', partOfSpeech: '', synonymChinese: '' },
+          { synonymId: uuidv1(), synonym: '', partOfSpeech: '', synonymChinese: '' },
         ],
         // 反義詞
         antonyms: [
-          { antonym: '', partOfSpeech: '', antonymChinese: '' },
+          { antonymId: uuidv1(), antonym: '', partOfSpeech: '', antonymChinese: '' },
         ],
         sentences: [
-          { sentence: 't', sentenceChinese: 'T' },
+          { sentenceId: uuidv1(), sentence: '', sentenceChinese: '' },
         ],
       },
     };
   },
   methods: {
     // 新增單字
-    createWord() {
-      this.$store.dispatch('createWord', this.word);
+    createWord(e) {
+      e.target.setAttribute('disabled', 'disabled');
+      const noty = new Noty({
+        type: 'warning',
+        theme: 'relax',
+        layout: 'bottomCenter',
+        animation: {
+          open: 'animated bounceInUp',
+          close: 'animated bounceOutDown',
+        },
+        text: '儲存中...',
+      }).show();
+
+      this.$store.dispatch('createWord', this.word)
+        .then(() => {
+          // 新增成功
+          noty.close();
+          e.target.removeAttribute('disabled');
+          new Noty({
+            type: 'success',
+            theme: 'relax',
+            layout: 'bottomCenter',
+            animation: {
+              open: 'animated bounceInUp',
+              close: 'animated bounceOutDown',
+            },
+            text: '<span class="oi oi-circle-check" aria-hidden="true"></span> 新增了一筆資料!',
+            timeout: 1000,
+          }).show();
+        })
+        .catch(() => {
+          // 新增失敗
+          noty.close();
+          e.target.removeAttribute('disabled');
+        });
     },
     // 例句列新增一行
     sentencesPlusOne() {
-      this.word.sentences.push({ sentence: '', sentenceChinese: '' });
+      this.word.sentences.push({ sentenceId: uuidv1(), sentence: '', sentenceChinese: '' });
     },
     // 例句列減少一行
     sentencesMinusOne() {
       const sentences = this.word.sentences;
-      sentences.splice(sentences.length - 1, sentences.length)
+      sentences.splice(sentences.length - 1, sentences.length);
     },
     // 衍生詞新增一行
     derivationsPlusOne() {
-      this.word.derivations.push({ derivation: '', partOfSpeech: '', derivationChinese: '' });
+      this.word.derivations.push({ derivationId: uuidv1(), derivation: '', partOfSpeech: '', derivationChinese: '' });
     },
     // 衍生詞減少一行
     derivationsMinusOne() {
       const derivations = this.word.derivations;
-      derivations.splice(derivations.length - 1, derivations.length)
+      derivations.splice(derivations.length - 1, derivations.length);
     },
     // 同義詞新增一行
     synonymsPlusOne() {
-      this.word.synonyms.push({ synonym: '', partOfSpeech: '', synonymChinese: '' });
+      this.word.synonyms.push({ synonymId: uuidv1(), synonym: '', partOfSpeech: '', synonymChinese: '' });
     },
     // 同義詞減少一行
     synonymsMinusOne() {
       const synonyms = this.word.synonyms;
-      synonyms.splice(synonyms.length - 1, synonyms.length)
+      synonyms.splice(synonyms.length - 1, synonyms.length);
     },
     // 反義詞新增一行
     antonymsPlusOne() {
-      this.word.antonyms.push({ antonym: '', partOfSpeech: '', antonymChinese: '' });
+      this.word.antonyms.push({ antonymId: uuidv1(), antonym: '', partOfSpeech: '', antonymChinese: '' });
     },
     // 反義詞減少一行
     antonymsMinusOne() {
       const antonyms = this.word.antonyms;
-      antonyms.splice(antonyms.length - 1, antonyms.length)
+      antonyms.splice(antonyms.length - 1, antonyms.length);
     },
   },
 };

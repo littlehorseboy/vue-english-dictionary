@@ -46,7 +46,20 @@
     </div>
     <hr>
 
-    <h4>自建字庫</h4>
+    <div class="row">
+      <div class="col">
+        <h4>自建字庫</h4>
+      </div>
+      <div class="col">
+        <div class="onoffswitch">
+          <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+          <label class="onoffswitch-label" for="myonoffswitch">
+            <span class="onoffswitch-inner"></span>
+            <span class="onoffswitch-switch"></span>
+          </label>
+        </div>
+      </div>
+    </div>
     <div v-for="word in words" :key="word.wordId" class="row mb-4">
       <div class="col-md-3">
         <div class="h5 text-success">{{ word.word }}</div>
@@ -92,7 +105,6 @@ export default {
   name: 'InsertEnglish',
   data() {
     return {
-
     };
   },
   computed: {
@@ -109,4 +121,49 @@ export default {
 </script>
 
 <style scoped>
+  .onoffswitch {
+    position: sticky; top: 10px; width: 90px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+  }
+  .onoffswitch-checkbox {
+      display: none;
+  }
+  .onoffswitch-label {
+      display: block; overflow: hidden; cursor: pointer;
+      border: 2px solid #999999; border-radius: 20px;
+  }
+  .onoffswitch-inner {
+      display: block; width: 200%; margin-left: -100%;
+      transition: margin 0.3s ease-in 0s;
+  }
+  .onoffswitch-inner:before, .onoffswitch-inner:after {
+      display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+      font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+      box-sizing: border-box;
+  }
+  .onoffswitch-inner:before {
+      content: "檢視";
+      padding-left: 10px;
+      background-color: #35943D; color: #FFFFFF;
+  }
+  .onoffswitch-inner:after {
+      content: "編輯";
+      padding-right: 10px;
+      background-color: #F07878; color: #FCE8E8;
+      text-align: right;
+  }
+  .onoffswitch-switch {
+      display: block; width: 22px; margin: 6px;
+      background: #F5F5F5;
+      position: absolute; top: 0; bottom: 0;
+      right: 56px;
+      border: 2px solid #999999; border-radius: 20px;
+      transition: all 0.3s ease-in 0s;
+  }
+  .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+      margin-left: 0;
+  }
+  .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+      right: 0px;
+  }
 </style>

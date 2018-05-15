@@ -9,7 +9,6 @@ export default {
   name: 'EnglishDictionary',
   data() {
     return {
-
     };
   },
 };

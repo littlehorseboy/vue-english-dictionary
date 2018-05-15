@@ -23,10 +23,12 @@ const state = {
       antonyms: [],
       sentences: [
         {
+          sentenceId: 0,
           sentence: 'The employee benefit policy will be expanded next year.',
           sentenceChinese: '員工福利政策明年將會擴大。',
         },
         {
+          sentenceId: 1,
           sentence: 'Companies must distribute health insurance policies to all workers.',
           sentenceChinese: '公司應該將健康保險單發給所有員工。',
         },
@@ -41,6 +43,7 @@ const state = {
       chinese: '遵守, 遵從',
       derivations: [
         {
+          derivationId: 0,
           derivation: 'compliance',
           partOfSpeech: 'n.',
           derivationChinese: '遵守',
@@ -50,6 +53,7 @@ const state = {
       antonyms: [],
       sentences: [
         {
+          sentenceId: 2,
           sentence: 'Employees must comply with the regulations governing computer use.',
           sentenceChinese: '員工必須遵守管理電腦使用的規定',
         },
@@ -69,7 +73,16 @@ const getters = {
 // actions 也是以 Object 形式建構
 const actions = {
   createWord({ commit }, newTodo) {
-    commit(types.CREATE_WORD, newTodo);
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (newTodo) {
+          commit(types.CREATE_WORD, newTodo);
+          resolve();
+        } else {
+          reject();
+        }
+      }, 1500);
+    });
   },
   deleteWord({ commit }, key) {
     commit(types.DELETE_WORD, key);
