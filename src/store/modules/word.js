@@ -81,28 +81,34 @@ const actions = {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (newTodo) {
-          newTodo.sentences.forEach((sentence, index, object) => {
-            if (!sentence.sentence) {
-              object.splice(index, 1);
-            }
-          });
-          newTodo.derivations.forEach((derivation, index, object) => {
-            if (!derivation.derivation) {
-              object.splice(index, 1);
-            }
-          });
-          newTodo.synonyms.forEach((synonym, index, object) => {
-            if (!synonym.synonym) {
-              object.splice(index, 1);
-            }
-          });
-          newTodo.antonyms.forEach((antonym, index, object) => {
-            if (!antonym.antonym) {
-              object.splice(index, 1);
-            }
-          });
-          commit(types.CREATE_WORD, newTodo);
-          resolve();
+          const findRepeat = state.words.find(word => (word.word === newTodo.word));
+
+          if (findRepeat) {
+            reject('Repeat');
+          } else {
+            newTodo.sentences.forEach((sentence, index, object) => {
+              if (!sentence.sentence) {
+                object.splice(index, 1);
+              }
+            });
+            newTodo.derivations.forEach((derivation, index, object) => {
+              if (!derivation.derivation) {
+                object.splice(index, 1);
+              }
+            });
+            newTodo.synonyms.forEach((synonym, index, object) => {
+              if (!synonym.synonym) {
+                object.splice(index, 1);
+              }
+            });
+            newTodo.antonyms.forEach((antonym, index, object) => {
+              if (!antonym.antonym) {
+                object.splice(index, 1);
+              }
+            });
+            commit(types.CREATE_WORD, newTodo);
+            resolve();
+          }
         } else {
           reject();
         }
