@@ -102,16 +102,17 @@
 
     <div v-if="!editBtnShow" class="col-md-1">
       <button @click="editMode = !editMode" type="button" class="btn btn-sm btn-outline-primary">
-        <span class="oi oi-circle-check" aria-hidden="true"></span> {{ !editMode ? '編輯' : '保存' }}
+        <span :class="[!editMode ? 'oi-pencil' : 'oi-circle-check']" class="oi" aria-hidden="true"></span> {{ !editMode ? '編輯' : '保存' }}
       </button>
-      <button type="button" class="btn btn-sm btn-outline-danger">
-        <span class="oi oi-circle-check" aria-hidden="true"></span> 刪除
+      <button @click="deleteWord($event, word.wordId)" type="button" class="btn btn-sm btn-outline-danger">
+        <span class="oi oi-circle-x" aria-hidden="true"></span> 刪除
       </button>
     </div>
   </div>
 </template>
 
 <script>
+import Noty from 'noty';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -124,6 +125,30 @@ export default {
   props: {
     word: Object,
     editBtnShow: Boolean,
+  },
+  methods: {
+    deleteWord(e, Id) {
+      e.target.setAttribute('disabled', 'disabled');
+
+      var n = new Noty({
+        type: 'warning',
+        theme: 'relax',
+        layout: 'bottomCenter',
+        text: '確定要刪除這筆?',
+        buttons: [
+          Noty.button('<span class="oi oi-circle-check" aria-hidden="true"></span>',
+            'btn btn-sm btn-outline-success mr-2', () => {
+              e.target.removeAttribute('disabled');
+              n.close();
+          }),
+          Noty.button('<span class="oi oi-circle-x" aria-hidden="true"></span>',
+            'btn btn-sm btn-outline-danger', () => {
+              e.target.removeAttribute('disabled');
+              n.close();
+          }),
+        ],
+      }).show();
+    },
   },
 };
 </script>
