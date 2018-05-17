@@ -47,7 +47,7 @@
     <hr>
 
     <div class="onoffswitch" style="float: right;">
-      <input v-model="viewMode" type="checkbox" class="onoffswitch-checkbox" id="myonoffswitch">
+      <input v-model="editBtnShow" type="checkbox" class="onoffswitch-checkbox" id="myonoffswitch">
       <label class="onoffswitch-label" for="myonoffswitch">
         <span class="onoffswitch-inner"></span>
         <span class="onoffswitch-switch"></span>
@@ -55,47 +55,50 @@
     </div>
 
     <h4 class="clear">自建字庫</h4>
-    <div v-for="word in words" :key="word.wordId" class="row mb-4">
-      <div class="col-md-3">
-        <div class="h5 text-success">{{ word.word }}</div>
-        <div>[{{ word.kkPhoneticSymbols }}]</div>
-        <div v-for="(derivation, index) in word.derivations" :key="`derivation_${index}`">
-          <small class="border border-success">衍</small>
-          <small>{{ derivation.derivation }}</small>
-          <small>{{ derivation.partOfSpeech }}</small>
-          <small>{{ derivation.derivationChinese }}</small>
-        </div>
-        <div v-for="(synonym, index) in word.synonyms" :key="`synonym_${index}`">
-          <small class="border border-success">同</small>
-          <small>{{ synonym.synonym }}</small>
-          <small>{{ synonym.partOfSpeech }}</small>
-          <small>{{ synonym.synonymChinese }}</small>
-        </div>
-        <div v-for="(antonym, index) in word.antonyms" :key="`antonym_${index}`">
-          <small class="border border-success">反</small>
-          <small>{{ antonym.antonym }}</small>
-          <small>{{ antonym.partOfSpeech }}</small>
-          <small>{{ antonym.antonymChinese }}</small>
-        </div>
-      </div>
-      <div :class="[viewMode ? 'col-md-9' : 'col-md-8']">
-        <div>
-          <span class="font-weight-bold">{{ word.partOfSpeech }}</span>
-          <span class="font-weight-bold">{{ word.chinese }}</span>
-          <div v-for="(sentence, index) in word.sentences" :key="index">
-            <div>{{ sentence.sentence }}</div>
-            <div>{{ sentence.sentenceChinese }}</div>
+    <div v-for="word in words" :key="word.wordId">
+      <SelectEnglishViewEdit :word="word" :editBtnShow="editBtnShow"></SelectEnglishViewEdit>
+      <!-- <div class="row">
+        <div class="col-md-3">
+          <div class="h5 text-success">{{ word.word }}</div>
+          <div>[{{ word.kkPhoneticSymbols }}]</div>
+          <div v-for="(derivation, index) in word.derivations" :key="`derivation_${index}`">
+            <small class="border border-success">衍</small>
+            <small>{{ derivation.derivation }}</small>
+            <small>{{ derivation.partOfSpeech }}</small>
+            <small>{{ derivation.derivationChinese }}</small>
+          </div>
+          <div v-for="(synonym, index) in word.synonyms" :key="`synonym_${index}`">
+            <small class="border border-success">同</small>
+            <small>{{ synonym.synonym }}</small>
+            <small>{{ synonym.partOfSpeech }}</small>
+            <small>{{ synonym.synonymChinese }}</small>
+          </div>
+          <div v-for="(antonym, index) in word.antonyms" :key="`antonym_${index}`">
+            <small class="border border-success">反</small>
+            <small>{{ antonym.antonym }}</small>
+            <small>{{ antonym.partOfSpeech }}</small>
+            <small>{{ antonym.antonymChinese }}</small>
           </div>
         </div>
-      </div>
-      <div v-if="!viewMode" class="col-md-1">
-        <button type="button" class="btn btn-sm btn-outline-primary">
-          <span class="oi oi-circle-check" aria-hidden="true"></span> 編輯
-        </button>
-        <button type="button" class="btn btn-sm btn-outline-danger">
-          <span class="oi oi-circle-check" aria-hidden="true"></span> 刪除
-        </button>
-      </div>
+        <div :class="[editBtnShow ? 'col-md-9' : 'col-md-8']">
+          <div>
+            <span class="font-weight-bold">{{ word.partOfSpeech }}</span>
+            <span class="font-weight-bold">{{ word.chinese }}</span>
+            <div v-for="(sentence, index) in word.sentences" :key="index">
+              <div>{{ sentence.sentence }}</div>
+              <div>{{ sentence.sentenceChinese }}</div>
+            </div>
+          </div>
+        </div>
+        <div v-if="!editBtnShow" class="col-md-1">
+          <button @click="editMode = !editMode" type="button" class="btn btn-sm btn-outline-primary">
+            <span class="oi oi-circle-check" aria-hidden="true"></span> 編輯
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-danger">
+            <span class="oi oi-circle-check" aria-hidden="true"></span> 刪除
+          </button>
+        </div>
+      </div> -->
     </div>
     <pre>{{ words }}</pre>
   </div>
@@ -103,12 +106,13 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import SelectEnglishViewEdit from './SelectEnglish/SelectEnglishViewEdit';
 
 export default {
-  name: 'InsertEnglish',
+  name: 'SelectEnglish',
   data() {
     return {
-      viewMode: true,
+      editBtnShow: true,
     };
   },
   computed: {
@@ -120,6 +124,9 @@ export default {
     createWord() {
       this.$store.dispatch('createWord', this.word);
     },
+  },
+  components: {
+    SelectEnglishViewEdit,
   },
 };
 </script>

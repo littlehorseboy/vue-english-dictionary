@@ -1,180 +1,177 @@
 <template>
   <div>
-    <form>
-      <div class="row mb-4">
-        <div class="col-md-3">
-          <!-- 英文單字 -->
-          <div>
-            <label for="insertWord">word</label>
-            <input v-model="word.word" v-validate="'required'" name="insertWord" data-vv-as="英文單字"
-              class="form-control" id="insertWord" placeholder="英文單字">
-            <small class="form-text text-danger mb-2">{{ errors.first('insertWord') }}</small>
-          </div>
-          <!-- end 英文單字 -->
-          <!-- K.K.音標 -->
-          <div class="mt-2">
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <!-- 英文單字 -->
+        <div>
+          <label for="insertWord">word</label>
+          <input v-model="word.word" v-validate="'required'" name="insertWord" data-vv-as="英文單字"
+            class="form-control" id="insertWord" placeholder="英文單字">
+          <small class="form-text text-danger mb-2">{{ errors.first('insertWord') }}</small>
+        </div>
+        <!-- end 英文單字 -->
+        <!-- K.K.音標 -->
+        <div class="mt-2">
+          <small>
+            <label for="insertKKPhoneticSymbols">K.K.phonetic symbols</label>
+            <input v-model="word.kkPhoneticSymbols" class="form-control form-control-sm"
+              id="insertKKPhoneticSymbols" placeholder="K.K.音標" value="æp(ə)l">
+          </small>
+        </div>
+        <!-- end K.K.音標 -->
+
+        <hr>
+
+        <!-- 衍生詞 (多筆) -->
+        <div class="row">
+          <div v-for="(derivation, index) in word.derivations" :key="`derivation_${index}`" class="col-md-12 position-relative">
+            <small class="border border-success">衍</small>
             <small>
-              <label for="insertKKPhoneticSymbols">K.K.phonetic symbols</label>
-              <input v-model="word.kkPhoneticSymbols" class="form-control form-control-sm"
-                id="insertKKPhoneticSymbols" placeholder="K.K.音標" value="æp(ə)l">
+              <label for="insertDerivation">Derivation</label>
+              <input v-model="derivation.derivation" class="form-control form-control-sm" id="insertDerivation" placeholder="衍生詞英文單字">
+            </small>
+            <small class="d-block mt-2">
+              <label for="insertDerivationPartOfSpeech">Derivation part of speech</label>
+              <input v-model="derivation.partOfSpeech" class="form-control form-control-sm" id="insertDerivationPartOfSpeech" placeholder="詞性">
+            </small>
+            <small class="d-block mt-2">
+              <label for="insertDerivationChinese">Derivation Chinese</label>
+              <input v-model="derivation.derivationChinese" class="form-control form-control-sm" id="insertDerivationChinese" placeholder="中文">
+            </small>
+            <div class="position-absolute" style="top: 0; right: 1rem;">
+              <button @click="derivationsPlusOne" v-if="index === word.derivations.length - 1"
+                class="btn btn-sm btn-outline-success">
+                <span class="oi oi-plus" aria-hidden="true"></span>
+              </button>
+              <button @click="derivationsMinusOne(derivation.derivationId)" v-if="word.derivations.length > 1"
+                class="btn btn-sm btn-outline-success">
+                <span class="oi oi-minus" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- end 衍生詞 (多筆) -->
+
+        <hr>
+
+        <!-- 同義詞 (多筆) -->
+        <div class="row">
+          <div v-for="(synonym, index) in word.synonyms" :key="`synonym_${index}`" class="col-md-12 position-relative">
+            <small class="border border-success">同</small>
+            <small>
+              <label for="insertSynonym">Synonym</label>
+              <input v-model="synonym.synonym" class="form-control form-control-sm" id="insertSynonym" placeholder="同義詞英文單字">
+            </small>
+            <small class="d-block mt-2">
+              <label for="insertSynonymPartOfSpeech">Synonym part of speech</label>
+              <input v-model="synonym.partOfSpeech" class="form-control form-control-sm" id="insertSynonymPartOfSpeech" placeholder="詞性">
+            </small>
+            <small class="d-block mt-2">
+              <label for="insertSynonymChinese">Synonym Chinese</label>
+              <input v-model="synonym.synonymChinese" class="form-control form-control-sm" id="insertSynonymChinese" placeholder="中文">
+            </small>
+            <div class="position-absolute" style="top: 0; right: 1rem;">
+              <button @click="synonymsPlusOne" v-if="index === word.synonyms.length - 1"
+                class="btn btn-sm btn-outline-success">
+                <span class="oi oi-plus" aria-hidden="true"></span>
+              </button>
+              <button @click="synonymsMinusOne(synonym.synonymId)" v-if="word.synonyms.length > 1"
+                class="btn btn-sm btn-outline-success">
+                <span class="oi oi-minus" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- end 同義詞 (多筆) -->
+
+        <hr>
+
+        <!-- 反義詞 (多筆) -->
+        <div class="row">
+          <div v-for="(antonym, index) in word.antonyms" :key="`antonym_${index}`" class="col-md-12 position-relative">
+            <small class="border border-success">反</small>
+            <small>
+              <label for="insertAntonym">Antonym</label>
+              <input v-model="antonym.antonym" class="form-control form-control-sm" id="insertAntonym" placeholder="反義詞英文單字">
+            </small>
+            <small class="d-block mt-2">
+              <label for="insertAntonymPartOfSpeech">Antonym part of speech</label>
+              <input v-model="antonym.partOfSpeech" class="form-control form-control-sm" id="insertAntonymPartOfSpeech" placeholder="詞性">
+            </small>
+            <small class="d-block mt-2">
+              <label for="insertAntonymChinese">Antonym Chinese</label>
+              <input v-model="antonym.antonymChinese" class="form-control form-control-sm" id="insertAntonymChinese" placeholder="中文">
+            </small>
+            <div class="position-absolute" style="top: 0; right: 1rem;">
+              <button @click="antonymsPlusOne" v-if="index === word.antonyms.length - 1"
+                class="btn btn-sm btn-outline-success">
+                <span class="oi oi-plus" aria-hidden="true"></span>
+              </button>
+              <button @click="antonymsMinusOne(antonym.antonymId)" v-if="word.antonyms.length > 1"
+                class="btn btn-sm btn-outline-success">
+                <span class="oi oi-minus" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- end 反義詞 (多筆) -->
+      </div>
+      <div class="col-md-9">
+        <div>
+          <!-- 詞性 -->
+          <div>
+            <label for="insertPartOfSpeech">Part of speech</label>
+            <input v-model="word.partOfSpeech" class="form-control" id="insertPartOfSpeech" placeholder="詞性">
+            <small class="form-text text-muted mb-2">
+              noun, pronoun(代名詞???), verb, adjective, adverb, preposition
+              , conjunction, interjection, phrase
             </small>
           </div>
-          <!-- end K.K.音標 -->
-
-          <hr>
-
-          <!-- 衍生詞 (多筆) -->
-          <div class="row">
-            <div v-for="(derivation, index) in word.derivations" :key="`derivation_${index}`" class="col-md-12 position-relative">
-              <small class="border border-success">衍</small>
-              <small>
-                <label for="insertDerivation">Derivation</label>
-                <input v-model="derivation.derivation" class="form-control form-control-sm" id="insertDerivation" placeholder="衍生詞英文單字">
-              </small>
-              <small class="d-block mt-2">
-                <label for="insertDerivationPartOfSpeech">Derivation part of speech</label>
-                <input v-model="derivation.partOfSpeech" class="form-control form-control-sm" id="insertDerivationPartOfSpeech" placeholder="詞性">
-              </small>
-              <small class="d-block mt-2">
-                <label for="insertDerivationChinese">Derivation Chinese</label>
-                <input v-model="derivation.derivationChinese" class="form-control form-control-sm" id="insertDerivationChinese" placeholder="中文">
-              </small>
-              <div class="position-absolute" style="top: 0; right: 1rem;">
-                <button @click="derivationsPlusOne" v-if="index === word.derivations.length - 1"
-                  class="btn btn-sm btn-outline-success">
-                  <span class="oi oi-plus" aria-hidden="true"></span>
-                </button>
-                <button @click="derivationsMinusOne(derivation.derivationId)" v-if="word.derivations.length > 1"
-                  class="btn btn-sm btn-outline-success">
-                  <span class="oi oi-minus" aria-hidden="true"></span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- end 衍生詞 (多筆) -->
-
-          <hr>
-
-          <!-- 同義詞 (多筆) -->
-          <div class="row">
-            <div v-for="(synonym, index) in word.synonyms" :key="`synonym_${index}`" class="col-md-12 position-relative">
-              <small class="border border-success">同</small>
-              <small>
-                <label for="insertSynonym">Synonym</label>
-                <input v-model="synonym.synonym" class="form-control form-control-sm" id="insertSynonym" placeholder="同義詞英文單字">
-              </small>
-              <small class="d-block mt-2">
-                <label for="insertSynonymPartOfSpeech">Synonym part of speech</label>
-                <input v-model="synonym.partOfSpeech" class="form-control form-control-sm" id="insertSynonymPartOfSpeech" placeholder="詞性">
-              </small>
-              <small class="d-block mt-2">
-                <label for="insertSynonymChinese">Synonym Chinese</label>
-                <input v-model="synonym.synonymChinese" class="form-control form-control-sm" id="insertSynonymChinese" placeholder="中文">
-              </small>
-              <div class="position-absolute" style="top: 0; right: 1rem;">
-                <button @click="synonymsPlusOne" v-if="index === word.synonyms.length - 1"
-                  class="btn btn-sm btn-outline-success">
-                  <span class="oi oi-plus" aria-hidden="true"></span>
-                </button>
-                <button @click="synonymsMinusOne(synonym.synonymId)" v-if="word.synonyms.length > 1"
-                  class="btn btn-sm btn-outline-success">
-                  <span class="oi oi-minus" aria-hidden="true"></span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- end 同義詞 (多筆) -->
-
-          <hr>
-
-          <!-- 反義詞 (多筆) -->
-          <div class="row">
-            <div v-for="(antonym, index) in word.antonyms" :key="`antonym_${index}`" class="col-md-12 position-relative">
-              <small class="border border-success">反</small>
-              <small>
-                <label for="insertAntonym">Antonym</label>
-                <input v-model="antonym.antonym" class="form-control form-control-sm" id="insertAntonym" placeholder="反義詞英文單字">
-              </small>
-              <small class="d-block mt-2">
-                <label for="insertAntonymPartOfSpeech">Antonym part of speech</label>
-                <input v-model="antonym.partOfSpeech" class="form-control form-control-sm" id="insertAntonymPartOfSpeech" placeholder="詞性">
-              </small>
-              <small class="d-block mt-2">
-                <label for="insertAntonymChinese">Antonym Chinese</label>
-                <input v-model="antonym.antonymChinese" class="form-control form-control-sm" id="insertAntonymChinese" placeholder="中文">
-              </small>
-              <div class="position-absolute" style="top: 0; right: 1rem;">
-                <button @click="antonymsPlusOne" v-if="index === word.antonyms.length - 1"
-                  class="btn btn-sm btn-outline-success">
-                  <span class="oi oi-plus" aria-hidden="true"></span>
-                </button>
-                <button @click="antonymsMinusOne(antonym.antonymId)" v-if="word.antonyms.length > 1"
-                  class="btn btn-sm btn-outline-success">
-                  <span class="oi oi-minus" aria-hidden="true"></span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- end 反義詞 (多筆) -->
-        </div>
-        <div class="col-md-9">
+          <!-- end 詞性 -->
+          <!-- 中文 -->
           <div>
-            <!-- 詞性 -->
-            <div>
-              <label for="insertPartOfSpeech">Part of speech</label>
-              <input v-model="word.partOfSpeech" class="form-control" id="insertPartOfSpeech" placeholder="詞性">
-              <small class="form-text text-muted mb-2">
-                noun, pronoun(代名詞???), verb, adjective, adverb, preposition
-                , conjunction, interjection, phrase
-              </small>
-            </div>
-            <!-- end 詞性 -->
-            <!-- 中文 -->
-            <div>
-              <label for="insertChinese">Chinese</label>
-              <input v-model="word.chinese" class="form-control" id="insertChinese" placeholder="中文">
-              <small class="form-text text-muted mb-2">用 , 分隔 不要空格</small>
-            </div>
-            <!-- end 中文 -->
-
-            <hr>
-
-            <!-- 例句, 例句中文 -->
-            <div class="row">
-              <div v-for="(sentence, index) in word.sentences" :key="index" class="col-md-12 position-relative">
-                <div>
-                  <label for="insertSentences">Sentences</label>
-                  <input v-model="sentence.sentence" class="form-control" id="insertSentences" placeholder="例句">
-                  <small class="form-text text-muted mb-2">
-                    ex. Companies must distribute health insurance policies to all workers.
-                  </small>
-                </div>
-                <div>
-                  <label for="insertSentencesChinese">Sentences Chinese</label>
-                  <input v-model="sentence.sentenceChinese" class="form-control" id="insertSentencesChinese" placeholder="例句中文">
-                  <small class="form-text text-muted mb-2">
-                    ex. 公司應該將健康保險單發給所有員工。
-                  </small>
-                </div>
-                <div class="position-absolute" style="top: 0; right: 1rem;">
-                  <button @click="sentencesPlusOne" v-if="index === word.sentences.length - 1"
-                    class="btn btn-sm btn-outline-success">
-                    <span class="oi oi-plus" aria-hidden="true"></span>
-                  </button>
-                  <button @click="sentencesMinusOne(sentence.sentenceId)" v-if="word.sentences.length > 1"
-                    class="btn btn-sm btn-outline-success">
-                    <span class="oi oi-minus" aria-hidden="true"></span>
-                  </button>
-                </div>
-              </div>
-
-            </div>
-            <!-- end 例句, 例句中文 -->
+            <label for="insertChinese">Chinese</label>
+            <input v-model="word.chinese" class="form-control" id="insertChinese" placeholder="中文">
+            <small class="form-text text-muted mb-2">用 , 分隔 不要空格</small>
           </div>
+          <!-- end 中文 -->
+
+          <hr>
+
+          <!-- 例句, 例句中文 -->
+          <div class="row">
+            <div v-for="(sentence, index) in word.sentences" :key="index" class="col-md-12 position-relative">
+              <div>
+                <label for="insertSentences">Sentences</label>
+                <input v-model="sentence.sentence" class="form-control" id="insertSentences" placeholder="例句">
+                <small class="form-text text-muted mb-2">
+                  ex. Companies must distribute health insurance policies to all workers.
+                </small>
+              </div>
+              <div>
+                <label for="insertSentencesChinese">Sentences Chinese</label>
+                <input v-model="sentence.sentenceChinese" class="form-control" id="insertSentencesChinese" placeholder="例句中文">
+                <small class="form-text text-muted mb-2">
+                  ex. 公司應該將健康保險單發給所有員工。
+                </small>
+              </div>
+              <div class="position-absolute" style="top: 0; right: 1rem;">
+                <button @click="sentencesPlusOne" v-if="index === word.sentences.length - 1"
+                  class="btn btn-sm btn-outline-success">
+                  <span class="oi oi-plus" aria-hidden="true"></span>
+                </button>
+                <button @click="sentencesMinusOne(sentence.sentenceId)" v-if="word.sentences.length > 1"
+                  class="btn btn-sm btn-outline-success">
+                  <span class="oi oi-minus" aria-hidden="true"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- end 例句, 例句中文 -->
         </div>
       </div>
-      <button @click="validateBeforeSubmit" ref="submitBtn" type="submit" class="btn btn-primary">新增</button>
-    </form>
+    </div>
+    <button @click="validateBeforeSubmit" ref="submitBtn" type="submit" class="btn btn-primary">新增</button>
 
     <hr class="mt-5">
     <h4>預覽</h4>
@@ -255,7 +252,7 @@ export default {
     };
   },
   methods: {
-    validateBeforeSubmit(e) {
+    validateBeforeSubmit() {
       this.$validator.validateAll().then((result) => {
         if (result) {
           this.createWord();

@@ -19,7 +19,7 @@ export default {
   }
 
   .loadingIcon {
-		animation: rotation 2s infinite linear;
+    animation: rotation 2s infinite linear;
   }
 
   @keyframes rotation {
