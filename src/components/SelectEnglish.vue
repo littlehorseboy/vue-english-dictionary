@@ -56,7 +56,7 @@
 
     <h4 class="clear">自建字庫</h4>
     <div v-for="word in words" :key="word.wordId">
-      <SelectEnglishViewEdit :word="word" :editBtnShow="editBtnShow"></SelectEnglishViewEdit>
+      <SelectEnglishViewEdit :addressWord="word" :editBtnShow="editBtnShow"></SelectEnglishViewEdit>
       <!-- <div class="row">
         <div class="col-md-3">
           <div class="h5 text-success">{{ word.word }}</div>
@@ -101,6 +101,8 @@
       </div> -->
     </div>
     <pre>{{ words }}</pre>
+    <pre>{{ updateWords }}</pre>
+    <pre>{{ deleteWords }}</pre>
   </div>
 </template>
 
@@ -118,6 +120,8 @@ export default {
   computed: {
     ...mapGetters({
       words: 'getWords',
+      updateWords: 'getUpdateWords',
+      deleteWords: 'getDeleteWords',
     }),
   },
   methods: {

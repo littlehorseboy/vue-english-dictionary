@@ -15,9 +15,9 @@ const types = {
 const state = {
   words: [
     {
-      wordId: 0,
+      wordId: 1,
       word: 'policy',
-      kkPhoneticSymbols: '`pɑləsɪ',
+      kkPhoneticSymbols: '[`pɑləsɪ]',
       partOfSpeech: 'n.',
       chinese: '政策, 規定; 保險單',
       derivations: [],
@@ -25,27 +25,26 @@ const state = {
       antonyms: [],
       sentences: [
         {
-          sentenceId: 0,
+          sentenceId: 1,
           sentence: 'The employee benefit policy will be expanded next year.',
           sentenceChinese: '員工福利政策明年將會擴大。',
         },
         {
-          sentenceId: 1,
+          sentenceId: 2,
           sentence: 'Companies must distribute health insurance policies to all workers.',
           sentenceChinese: '公司應該將健康保險單發給所有員工。',
         },
-
       ],
     },
     {
-      wordId: 1,
+      wordId: 2,
       word: 'comply',
-      kkPhoneticSymbols: 'kk音標',
+      kkPhoneticSymbols: '',
       partOfSpeech: 'v.',
       chinese: '遵守, 遵從',
       derivations: [
         {
-          derivationId: 0,
+          derivationId: 1,
           derivation: 'compliance',
           partOfSpeech: 'n.',
           derivationChinese: '遵守',
@@ -55,15 +54,26 @@ const state = {
       antonyms: [],
       sentences: [
         {
-          sentenceId: 2,
+          sentenceId: 3,
           sentence: 'Employees must comply with the regulations governing computer use.',
           sentenceChinese: '員工必須遵守管理電腦使用的規定',
         },
-
       ],
     },
+    {
+      wordId: 3,
+      word: 'associate',
+      kkPhoneticSymbols: '',
+      partOfSpeech: 'v.',
+      chinese: '關聯',
+      derivations: [],
+      synonyms: [],
+      antonyms: [],
+      sentences: [],
+    },
   ],
-  originalWords: _.cloneDeep(this.words), // horseTODO: 還不算太搞清楚物件內怎麼讀取自己?
+  deleteWords: [],
+  updateWords: [],
 };
 
 state.originalWords = _.cloneDeep(state.words);
@@ -72,6 +82,12 @@ state.originalWords = _.cloneDeep(state.words);
 const getters = {
   getWords(state) {
     return state.words;
+  },
+  getDeleteWords(state) {
+    return state.deleteWords;
+  },
+  getUpdateWords(state) {
+    return state.updateWords;
   },
 };
 
@@ -115,11 +131,27 @@ const actions = {
       }, 1500);
     });
   },
-  deleteWord({ commit }, key) {
-    commit(types.DELETE_WORD, key);
+  deleteWord({ commit }, wordId) {
+    return new Promise((resolve, reject) => {
+      if (wordId) {
+        commit(types.DELETE_WORD, wordId);
+        resolve();
+      } else {
+        reject();
+      }
+    });
   },
   updateWord({ commit }, obj) {
-    commit(types.UPDATE_WORD, obj);
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (obj) {
+          commit(types.UPDATE_WORD, obj);
+          resolve();
+        } else {
+          reject();
+        }
+      }, 1500);
+    });
   },
 };
 
@@ -134,23 +166,40 @@ const mutations = {
   },
 
   // 刪除
-  [types.DELETE_WORD](state, key) {
-    for (let i = 0; i < state.words.length; i += 1) {
-      const item = state.words[i];
-      if (item.key === key) {
-        console.log('DELETE_WORD:', item.content, ', index?', i);
-        // 刪除，單純將 todo Array 從 splice 出去。
-        state.words.splice(i, 1);
-        break;
-      }
+  [types.DELETE_WORD](state, wordId) {
+    const findRepeatIndex = state.deleteWords.findIndex(deleteWord => (deleteWord === wordId));
+    if (findRepeatIndex !== -1) {
+      state.deleteWords.splice(findRepeatIndex, 1);
+    } else {
+      state.deleteWords.push(wordId);
     }
   },
+
+  // 修改
   [types.UPDATE_WORD](state, obj) {
     for (let i = 0; i < state.words.length; i += 1) {
       const item = state.words[i];
-      if (item.key === obj.key) {
-        console.log('UPDATE_WORD:', item.content, ' to →', obj.update);
-        state.words[i].content = obj.update;
+      if (item.wordId === obj.wordId) {
+        const findRepeat = state.updateWords.find(updateWord => (updateWord.wordId === obj.wordId));
+        if (!findRepeat) { // horseTODO: 修改過的單字新增至此予以後續送出, 但是回復到最初狀態的情況要予以刪除
+          state.updateWords.push(_.cloneDeep(obj));
+        } else {
+          Object.keys(findRepeat).forEach((key) => {
+            if (!_.isArray(findRepeat[key])) {
+              findRepeat[key] = obj[key];
+            } else {
+              findRepeat[key] = _.cloneDeep(obj[key]);
+            }
+          });
+        }
+
+        Object.keys(state.words[i]).forEach((key) => {
+          if (!_.isArray(state.words[i][key])) {
+            state.words[i][key] = obj[key];
+          } else {
+            state.words[i][key] = _.cloneDeep(obj[key]);
+          }
+        });
         break;
       }
     }

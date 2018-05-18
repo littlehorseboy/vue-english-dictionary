@@ -15,7 +15,7 @@
           <small>
             <label for="insertKKPhoneticSymbols">K.K.phonetic symbols</label>
             <input v-model="word.kkPhoneticSymbols" class="form-control form-control-sm"
-              id="insertKKPhoneticSymbols" placeholder="K.K.音標" value="æp(ə)l">
+              id="insertKKPhoneticSymbols" placeholder="K.K.音標" value="[æp(ə)l]">
           </small>
         </div>
         <!-- end K.K.音標 -->
@@ -221,32 +221,32 @@ import 'animate.css';
 import 'noty/src/noty.scss';
 import 'noty/src/themes/relax.scss';
 
-const uuidv1 = require('uuid/v1');
+const uuidv4 = require('uuid/v4');
 
 export default {
   name: 'InsertEnglish',
   data() {
     return {
       word: {
-        wordId: uuidv1(),
+        wordId: uuidv4().replace(/-/g, ''),
         word: 'policy',
         kkPhoneticSymbols: 'pɑləsɪ',
         partOfSpeech: 'n.',
         chinese: '政策, 規定; 保險單',
         // 衍生詞
         derivations: [
-          { derivationId: uuidv1(), derivation: '', partOfSpeech: '', derivationChinese: '' },
+          { derivationId: uuidv4().replace(/-/g, ''), derivation: '', partOfSpeech: '', derivationChinese: '' },
         ],
         // 同義詞
         synonyms: [
-          { synonymId: uuidv1(), synonym: '', partOfSpeech: '', synonymChinese: '' },
+          { synonymId: uuidv4().replace(/-/g, ''), synonym: '', partOfSpeech: '', synonymChinese: '' },
         ],
         // 反義詞
         antonyms: [
-          { antonymId: uuidv1(), antonym: '', partOfSpeech: '', antonymChinese: '' },
+          { antonymId: uuidv4().replace(/-/g, ''), antonym: '', partOfSpeech: '', antonymChinese: '' },
         ],
         sentences: [
-          { sentenceId: uuidv1(), sentence: '', sentenceChinese: '' },
+          { sentenceId: uuidv4().replace(/-/g, ''), sentence: '', sentenceChinese: '' },
         ],
       },
     };
@@ -300,19 +300,19 @@ export default {
 
           // 重置表單內容 一個一個的 不知有沒有更好的方式
           // 還有取消 $validator 重置後跳出驗證
-          this.word.wordId = uuidv1();
+          this.word.wordId = uuidv4().replace(/-/g, '');
           this.word.word = '';
           this.word.kkPhoneticSymbols = '';
           this.word.partOfSpeech = '';
           this.word.chinese = '';
           this.word.derivations = [];
-          this.word.derivations.push({ derivationId: uuidv1(), derivation: '', partOfSpeech: '', derivationChinese: '' });
+          this.word.derivations.push({ derivationId: uuidv4().replace(/-/g, ''), derivation: '', partOfSpeech: '', derivationChinese: '' });
           this.word.synonyms = [];
-          this.word.synonyms.push({ synonymId: uuidv1(), synonym: '', partOfSpeech: '', synonymChinese: '' });
+          this.word.synonyms.push({ synonymId: uuidv4().replace(/-/g, ''), synonym: '', partOfSpeech: '', synonymChinese: '' });
           this.word.antonyms = [];
-          this.word.antonyms.push({ antonymId: uuidv1(), antonym: '', partOfSpeech: '', antonymChinese: '' });
+          this.word.antonyms.push({ antonymId: uuidv4().replace(/-/g, ''), antonym: '', partOfSpeech: '', antonymChinese: '' });
           this.word.sentences = [];
-          this.word.sentences.push({ sentenceId: uuidv1(), sentence: '', sentenceChinese: '' });
+          this.word.sentences.push({ sentenceId: uuidv4().replace(/-/g, ''), sentence: '', sentenceChinese: '' });
           this.$validator.reset();
         })
         .catch((e) => {
@@ -334,7 +334,7 @@ export default {
     },
     // 例句列新增一行
     sentencesPlusOne() {
-      this.word.sentences.push({ sentenceId: uuidv1(), sentence: '', sentenceChinese: '' });
+      this.word.sentences.push({ sentenceId: uuidv4().replace(/-/g, ''), sentence: '', sentenceChinese: '' });
     },
     // 例句列減少一行
     sentencesMinusOne(Id) {
@@ -345,7 +345,7 @@ export default {
     },
     // 衍生詞新增一行
     derivationsPlusOne() {
-      this.word.derivations.push({ derivationId: uuidv1(), derivation: '', partOfSpeech: '', derivationChinese: '' });
+      this.word.derivations.push({ derivationId: uuidv4().replace(/-/g, ''), derivation: '', partOfSpeech: '', derivationChinese: '' });
     },
     // 衍生詞減少一行
     derivationsMinusOne(Id) {
@@ -356,7 +356,7 @@ export default {
     },
     // 同義詞新增一行
     synonymsPlusOne() {
-      this.word.synonyms.push({ synonymId: uuidv1(), synonym: '', partOfSpeech: '', synonymChinese: '' });
+      this.word.synonyms.push({ synonymId: uuidv4().replace(/-/g, ''), synonym: '', partOfSpeech: '', synonymChinese: '' });
     },
     // 同義詞減少一行
     synonymsMinusOne(Id) {
@@ -367,7 +367,7 @@ export default {
     },
     // 反義詞新增一行
     antonymsPlusOne() {
-      this.word.antonyms.push({ antonymId: uuidv1(), antonym: '', partOfSpeech: '', antonymChinese: '' });
+      this.word.antonyms.push({ antonymId: uuidv4().replace(/-/g, ''), antonym: '', partOfSpeech: '', antonymChinese: '' });
     },
     // 反義詞減少一行
     antonymsMinusOne(Id) {
