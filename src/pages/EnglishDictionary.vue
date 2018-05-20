@@ -1,6 +1,7 @@
 <template>
-  <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div>
+    <nav class="navbar navbar-expand-lg navbar-dark border-bottom"
+      style="background-color: #839894; box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, .05);">
       <router-link :to="{ name: 'Index'}" class="navbar-brand">首頁</router-link>
       <button class="navbar-toggler" type="button" data-toggle="collapse"
         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -22,7 +23,9 @@
         </ul>
       </div>
     </nav>
-    <router-view></router-view>
+    <div class="container">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -38,6 +41,7 @@ export default {
 
 <style scoped>
   .router-link-active:not(.navbar-brand) {
-    color: green !important;
+    color: #fff !important;
+    font-weight: bold;
   }
 </style>

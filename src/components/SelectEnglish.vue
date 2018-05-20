@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pt-3">
     <h4>說明</h4>
     <div class="row mb-4">
       <div class="col-md-3">
@@ -46,7 +46,7 @@
     </div>
     <hr>
 
-    <div class="onoffswitch" style="float: right;">
+    <div class="onoffswitch" style="float: right; z-index: 1;">
       <input v-model="editBtnShow" type="checkbox" class="onoffswitch-checkbox" id="myonoffswitch">
       <label class="onoffswitch-label" for="myonoffswitch">
         <span class="onoffswitch-inner"></span>
@@ -54,60 +54,31 @@
       </label>
     </div>
 
+    <div class="position-fixed" style="bottom: 2rem; right: 2rem; z-index: 1;">
+      <button @click="submitWords" class="btn btn-primary">保存</button>
+    </div>
+
     <h4 class="clear">自建字庫</h4>
     <div v-for="word in words" :key="word.wordId">
       <SelectEnglishViewEdit :addressWord="word" :editBtnShow="editBtnShow"></SelectEnglishViewEdit>
-      <!-- <div class="row">
-        <div class="col-md-3">
-          <div class="h5 text-success">{{ word.word }}</div>
-          <div>[{{ word.kkPhoneticSymbols }}]</div>
-          <div v-for="(derivation, index) in word.derivations" :key="`derivation_${index}`">
-            <small class="border border-success">衍</small>
-            <small>{{ derivation.derivation }}</small>
-            <small>{{ derivation.partOfSpeech }}</small>
-            <small>{{ derivation.derivationChinese }}</small>
-          </div>
-          <div v-for="(synonym, index) in word.synonyms" :key="`synonym_${index}`">
-            <small class="border border-success">同</small>
-            <small>{{ synonym.synonym }}</small>
-            <small>{{ synonym.partOfSpeech }}</small>
-            <small>{{ synonym.synonymChinese }}</small>
-          </div>
-          <div v-for="(antonym, index) in word.antonyms" :key="`antonym_${index}`">
-            <small class="border border-success">反</small>
-            <small>{{ antonym.antonym }}</small>
-            <small>{{ antonym.partOfSpeech }}</small>
-            <small>{{ antonym.antonymChinese }}</small>
-          </div>
-        </div>
-        <div :class="[editBtnShow ? 'col-md-9' : 'col-md-8']">
-          <div>
-            <span class="font-weight-bold">{{ word.partOfSpeech }}</span>
-            <span class="font-weight-bold">{{ word.chinese }}</span>
-            <div v-for="(sentence, index) in word.sentences" :key="index">
-              <div>{{ sentence.sentence }}</div>
-              <div>{{ sentence.sentenceChinese }}</div>
-            </div>
-          </div>
-        </div>
-        <div v-if="!editBtnShow" class="col-md-1">
-          <button @click="editMode = !editMode" type="button" class="btn btn-sm btn-outline-primary">
-            <span class="oi oi-circle-check" aria-hidden="true"></span> 編輯
-          </button>
-          <button type="button" class="btn btn-sm btn-outline-danger">
-            <span class="oi oi-circle-check" aria-hidden="true"></span> 刪除
-          </button>
-        </div>
-      </div> -->
     </div>
+
+    <pre>words</pre>
     <pre>{{ words }}</pre>
+    <pre>createWords</pre>
+    <pre>{{ createWords }}</pre>
+    <pre>updateWords</pre>
     <pre>{{ updateWords }}</pre>
+    <pre>deleteWords</pre>
     <pre>{{ deleteWords }}</pre>
   </div>
 </template>
 
 <script>
+import Noty from 'noty';
 import { mapGetters, mapActions } from 'vuex';
+import 'noty/src/noty.scss';
+import 'noty/src/themes/relax.scss';
 import SelectEnglishViewEdit from './SelectEnglish/SelectEnglishViewEdit';
 
 export default {
@@ -120,13 +91,49 @@ export default {
   computed: {
     ...mapGetters({
       words: 'getWords',
+      createWords: 'getCreateWords',
       updateWords: 'getUpdateWords',
       deleteWords: 'getDeleteWords',
     }),
   },
   methods: {
-    createWord() {
-      this.$store.dispatch('createWord', this.word);
+    submitWords() {
+      const noty = new Noty({
+        type: 'warning',
+        theme: 'relax',
+        layout: 'bottomCenter',
+        text: '<span class="oi oi-aperture loadingIcon" aria-hidden="true"></span> 儲存中...',
+      }).show();
+
+      this.$store.dispatch('submitWords')
+        .then(() => {
+          // 新增成功
+          noty.close();
+
+          // this.$refs.submitBtn.removeAttribute('disabled');
+
+          new Noty({
+            type: 'success',
+            theme: 'relax',
+            layout: 'bottomCenter',
+            text: '<span class="oi oi-circle-check" aria-hidden="true"></span> 保存完成!',
+            timeout: 1000,
+          }).show();
+        })
+        .catch((e) => {
+          // 新增失敗
+          noty.close();
+
+          // this.$refs.submitBtn.removeAttribute('disabled');
+
+          new Noty({
+            type: 'warning',
+            theme: 'relax',
+            layout: 'bottomCenter',
+            text: `<span class="oi oi-circle-x" aria-hidden="true"></span> ${e}`,
+            timeout: 1000,
+          }).show();
+        });
     },
   },
   components: {
@@ -163,12 +170,11 @@ export default {
       display: block;
       float: left;
       width: 50%;
-      height: 30px;
+      height: 25px;
       padding: 0;
-      line-height: 30px;
+      line-height: 25px;
       font-size: 14px;
       color: white;
-      font-family: Trebuchet, Arial, sans-serif;
       font-weight: bold;
       box-sizing: border-box;
   }
@@ -187,7 +193,7 @@ export default {
   }
   .onoffswitch-switch {
       display: block;
-      width: 22px;
+      width: 18px;
       margin: 6px;
       background: #F5F5F5;
       position: absolute;

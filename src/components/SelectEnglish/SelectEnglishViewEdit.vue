@@ -105,16 +105,16 @@
     <!-- end 編輯模式 -->
 
     <div v-if="!editBtnShow" class="col-md-1">
-      <button @click="editModeChange" type="button" class="btn btn-sm btn-outline-primary" :disabled="deleteWordCheck">
-        <span :class="[!editMode ? 'oi-pencil' : 'oi-circle-check']" class="oi" aria-hidden="true"></span> {{ !editMode ? '編輯' : '保存' }}
+      <button @click="editModeChange" type="button" class="btn btn-sm btn-primary" :disabled="deleteWordCheck">
+        <span :class="[!editMode ? 'oi-pencil' : 'oi-circle-check']" class="oi" aria-hidden="true"></span> {{ !editMode ? '編輯' : '完成' }}
       </button>
-      <button @click="deleteWord" type="button" class="btn btn-sm btn-outline-danger" :disabled="deleteWordCheck">
+      <button @click="deleteWord" type="button" class="btn btn-sm btn-danger" :disabled="deleteWordCheck">
         <span class="oi oi-circle-x" aria-hidden="true"></span> 刪除
       </button>
-      <button v-if="!originalWordCheck && !deleteWordCheck" @click="previousWord" type="button" class="btn btn-sm btn-outline-primary" :disabled="deleteWordCheck">
+      <button v-if="!originalWordCheck && !deleteWordCheck" @click="previousWord" type="button" class="btn btn-sm btn-primary" :disabled="deleteWordCheck">
         <span class="oi oi-action-redo" aria-hidden="true"></span> 回復
       </button>
-      <button v-if="deleteWordCheck" @click="previousWord('delete')" type="button" class="btn btn-sm btn-outline-primary">
+      <button v-if="deleteWordCheck" @click="previousWord('delete')" type="button" class="btn btn-sm btn-primary">
         <span class="oi oi-action-redo" aria-hidden="true"></span> 回復
       </button>
     </div>
@@ -340,7 +340,7 @@ export default {
                   type: 'success',
                   theme: 'relax',
                   layout: 'bottomCenter',
-                  text: '<span class="oi oi-circle-check" aria-hidden="true"></span> 已回復到最初狀態, 請進行保存!',
+                  text: '<span class="oi oi-circle-check" aria-hidden="true"></span> 已回復到最初狀態, 請選擇完成儲存此修改!',
                   timeout: 1500,
                 }).show();
 

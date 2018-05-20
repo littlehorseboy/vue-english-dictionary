@@ -9,6 +9,7 @@ const types = {
   CREATE_WORD: 'word/CREATE_WORD',
   DELETE_WORD: 'word/DELETE_WORD',
   UPDATE_WORD: 'word/UPDATE_WORD',
+  SUBMIT_WORDS: 'word/SUBMIT_WORDS',
 };
 
 // state 必須是 Object
@@ -72,6 +73,7 @@ const state = {
       sentences: [],
     },
   ],
+  createWords: [],
   deleteWords: [],
   updateWords: [],
 };
@@ -82,6 +84,9 @@ state.originalWords = _.cloneDeep(state.words);
 const getters = {
   getWords(state) {
     return state.words;
+  },
+  getCreateWords(state) {
+    return state.createWords;
   },
   getDeleteWords(state) {
     return state.deleteWords;
@@ -153,6 +158,20 @@ const actions = {
       }, 1500);
     });
   },
+  submitWords({ commit }) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (state.deleteWords.length > 0
+          || state.createWords.length > 0
+          || state.updateWords.length > 0) {
+          commit(types.SUBMIT_WORDS);
+          resolve();
+        } else {
+          reject('沒有需要儲存的資料!');
+        }
+      }, 1500);
+    });
+  },
 };
 
 // mutations 變動
@@ -162,6 +181,7 @@ const mutations = {
     // 自動編號 Id
     // let wordId = state.words.length;
     state.words.push(newWord);
+    state.createWords.push(newWord);
     // wordId += 1;
   },
 
@@ -203,6 +223,11 @@ const mutations = {
         break;
       }
     }
+  },
+  // 新增 修改 刪除 的陣列 比對後送出 (順序: 刪除 > 新增 > 修改)
+  [types.SUBMIT_WORDS](state) {
+    debugger;
+    return false;
   },
 };
 
