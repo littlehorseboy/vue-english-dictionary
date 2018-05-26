@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Axios from 'axios';
 
 /*
   這邊可以改為用 types 物件取代 matutions_type.js (繼續用也可以)
@@ -6,72 +7,77 @@ import _ from 'lodash';
   因為 action、mutation、和 getter 依然是註冊在全域的命名空間
 */
 const types = {
+  GET_WORDS: 'word/GET_WORDS',
   CREATE_WORD: 'word/CREATE_WORD',
   DELETE_WORD: 'word/DELETE_WORD',
   UPDATE_WORD: 'word/UPDATE_WORD',
   SUBMIT_WORDS: 'word/SUBMIT_WORDS',
+  DELETE_SPLICE_WORD: 'word/DELETE_SPLICE_WORD',
+  CLEAR_DELETEWORDS: 'word/CLEAR_DELETEWORDS',
+  CLEAR_CREATEWORDS: 'word/CLEAR_CREATEWORDS',
+  CLEAR_UPDATEWORDS: 'word/CLEAR_UPDATEWORDS',
 };
 
 // state 必須是 Object
 const state = {
   words: [
-    {
-      wordId: 1,
-      word: 'policy',
-      kkPhoneticSymbols: '[`pɑləsɪ]',
-      partOfSpeech: 'n.',
-      chinese: '政策, 規定; 保險單',
-      derivations: [],
-      synonyms: [],
-      antonyms: [],
-      sentences: [
-        {
-          sentenceId: 1,
-          sentence: 'The employee benefit policy will be expanded next year.',
-          sentenceChinese: '員工福利政策明年將會擴大。',
-        },
-        {
-          sentenceId: 2,
-          sentence: 'Companies must distribute health insurance policies to all workers.',
-          sentenceChinese: '公司應該將健康保險單發給所有員工。',
-        },
-      ],
-    },
-    {
-      wordId: 2,
-      word: 'comply',
-      kkPhoneticSymbols: '',
-      partOfSpeech: 'v.',
-      chinese: '遵守, 遵從',
-      derivations: [
-        {
-          derivationId: 1,
-          derivation: 'compliance',
-          partOfSpeech: 'n.',
-          derivationChinese: '遵守',
-        },
-      ],
-      synonyms: [],
-      antonyms: [],
-      sentences: [
-        {
-          sentenceId: 3,
-          sentence: 'Employees must comply with the regulations governing computer use.',
-          sentenceChinese: '員工必須遵守管理電腦使用的規定',
-        },
-      ],
-    },
-    {
-      wordId: 3,
-      word: 'associate',
-      kkPhoneticSymbols: '',
-      partOfSpeech: 'v.',
-      chinese: '關聯',
-      derivations: [],
-      synonyms: [],
-      antonyms: [],
-      sentences: [],
-    },
+    // {
+    //   wordId: 1,
+    //   word: 'policy',
+    //   kkPhoneticSymbols: '[`pɑləsɪ]',
+    //   partOfSpeech: 'n.',
+    //   chinese: '政策, 規定; 保險單',
+    //   derivations: [],
+    //   synonyms: [],
+    //   antonyms: [],
+    //   sentences: [
+    //     {
+    //       sentenceId: 1,
+    //       sentence: 'The employee benefit policy will be expanded next year.',
+    //       sentenceChinese: '員工福利政策明年將會擴大。',
+    //     },
+    //     {
+    //       sentenceId: 2,
+    //       sentence: 'Companies must distribute health insurance policies to all workers.',
+    //       sentenceChinese: '公司應該將健康保險單發給所有員工。',
+    //     },
+    //   ],
+    // },
+    // {
+    //   wordId: 2,
+    //   word: 'comply',
+    //   kkPhoneticSymbols: '',
+    //   partOfSpeech: 'v.',
+    //   chinese: '遵守, 遵從',
+    //   derivations: [
+    //     {
+    //       derivationId: 1,
+    //       derivation: 'compliance',
+    //       partOfSpeech: 'n.',
+    //       derivationChinese: '遵守',
+    //     },
+    //   ],
+    //   synonyms: [],
+    //   antonyms: [],
+    //   sentences: [
+    //     {
+    //       sentenceId: 3,
+    //       sentence: 'Employees must comply with the regulations governing computer use.',
+    //       sentenceChinese: '員工必須遵守管理電腦使用的規定',
+    //     },
+    //   ],
+    // },
+    // {
+    //   wordId: 3,
+    //   word: 'associate',
+    //   kkPhoneticSymbols: '',
+    //   partOfSpeech: 'v.',
+    //   chinese: '關聯',
+    //   derivations: [],
+    //   synonyms: [],
+    //   antonyms: [],
+    //   sentences: [],
+    // },
   ],
   createWords: [],
   deleteWords: [],
@@ -98,6 +104,16 @@ const getters = {
 
 // actions 也是以 Object 形式建構
 const actions = {
+  getWords({ commit }) {
+    Axios({
+      method: 'get',
+      url: 'http://localhost:3001/api/items',
+    }).then((response) => {
+      const data = response.data;
+      commit(types.GET_WORDS, data);
+    });
+  },
+
   createWord({ commit }, newTodo) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -160,22 +176,61 @@ const actions = {
   },
   submitWords({ commit }) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (state.deleteWords.length > 0
-          || state.createWords.length > 0
-          || state.updateWords.length > 0) {
-          commit(types.SUBMIT_WORDS);
-          resolve();
-        } else {
-          reject('沒有需要儲存的資料!');
+      if (state.deleteWords.length > 0
+        || state.createWords.length > 0
+        || state.updateWords.length > 0) {
+        commit(types.SUBMIT_WORDS);
+
+        const deleteWords = state.deleteWords;
+        const createWords = state.createWords;
+        const updateWords = state.updateWords;
+
+        if (deleteWords.length > 0) {
+          Axios({
+            method: 'delete',
+            url: 'http://localhost:3001/api/items',
+            data: deleteWords,
+          }).then((response) => {
+            debugger;
+            commit(types.DELETE_SPLICE_WORD, deleteWords);
+            commit(types.CLEAR_DELETEWORDS);
+          });
         }
-      }, 1500);
+
+        if (createWords.length > 0) {
+          Axios({
+            method: 'post',
+            url: 'http://localhost:3001/api/items',
+            data: createWords,
+          }).then((response) => {
+            commit(types.CLEAR_CREATEWORDS);
+          });
+        }
+
+        if (updateWords.length > 0) {
+          Axios({
+            method: 'put',
+            url: 'http://localhost:3001/api/items',
+            data: updateWords,
+          }).then((response) => {
+            debugger;
+            commit(types.CLEAR_UPDATEWORDS);
+          });
+        }
+
+        resolve();
+      } else {
+        reject('沒有需要儲存的資料!');
+      }
     });
   },
 };
 
 // mutations 變動
 const mutations = {
+  [types.GET_WORDS](state, words) {
+    state.words = words;
+  },
   // 新增
   [types.CREATE_WORD](state, newWord) {
     // 自動編號 Id
@@ -226,8 +281,49 @@ const mutations = {
   },
   // 新增 修改 刪除 的陣列 比對後送出 (順序: 刪除 > 新增 > 修改)
   [types.SUBMIT_WORDS](state) {
-    debugger;
-    return false;
+    const deleteWords = state.deleteWords;
+    const createWords = state.createWords;
+    const updateWords = state.updateWords;
+
+    deleteWords.forEach((deleteWord) => {
+      // 刪除陣列內 如果在 修改陣列 有相同的 Id 修改陣列作廢刪除 以刪除為主
+      if (updateWords.findIndex(updateWord => updateWord.wordId === deleteWord) !== -1) {
+        updateWords.splice(updateWords.findIndex(updateWord => updateWord.wordId === deleteWord), 1);
+      }
+    });
+
+    createWords.forEach((createWord) => {
+      // 新增陣列內 如果在 刪除陣列 有相同的 Id "刪除 新增 修改"均作廢刪除
+      if (deleteWords.findIndex(deleteWord => deleteWord === createWord.wordId) !== -1) {
+        deleteWords.splice(deleteWords.findIndex(deleteWord => deleteWord === createWord.wordId), 1);
+        createWords.splice(createWords.findIndex(createWord => createWord.wordId === createWord.wordId), 1);
+        updateWords.splice(updateWords.findIndex(updateWord => updateWord.wordId === createWord.wordId), 1);
+        state.words.splice(state.words.findIndex(word => word.wordId === createWord.wordId), 1);
+      }
+
+      // 新增陣列內 如果在 修改陣列 有相同的 Id 修改陣列作廢刪除 以新增為主
+      if (updateWords.findIndex(updateWord => updateWord.wordId === createWord.wordId) !== -1) {
+        updateWords.splice(updateWords.findIndex(updateWord => updateWord.wordId === createWord.wordId), 1);
+      }
+    });
+  },
+  // 清除
+  [types.DELETE_SPLICE_WORD](state, deleteArray) {
+    deleteArray.forEach((deleteWord) => {
+      state.words.splice(state.words.findIndex(updateWord => updateWord.wordId === deleteWord), 1);
+    });
+  },
+  // 清除
+  [types.CLEAR_DELETEWORDS]() {
+    state.deleteWords.splice(0, state.deleteWords.length);
+  },
+  // 清除
+  [types.CLEAR_CREATEWORDS]() {
+    state.createWords.splice(0, state.createWords.length);
+  },
+  // 清除
+  [types.CLEAR_UPDATEWORDS]() {
+    state.updateWords.splice(0, state.updateWords.length);
   },
 };
 

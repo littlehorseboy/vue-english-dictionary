@@ -347,6 +347,8 @@ export default {
     },
     // 新增單字
     createWord() {
+      const self = this;
+
       this.$refs.submitBtn.setAttribute('disabled', 'disabled');
 
       const noty = new Noty({
@@ -365,7 +367,7 @@ export default {
           // 新增成功
           noty.close();
 
-          this.$refs.submitBtn.removeAttribute('disabled');
+          self.$refs.submitBtn.removeAttribute('disabled');
 
           new Noty({
             type: 'success',
@@ -377,26 +379,26 @@ export default {
 
           // 重置表單內容 一個一個的 不知有沒有更好的方式
           // 還有取消 $validator 重置後跳出驗證
-          this.word.wordId = uuidv4().replace(/-/g, '');
-          this.word.word = '';
-          this.word.kkPhoneticSymbols = '';
-          this.word.partOfSpeech = '';
-          this.word.chinese = '';
-          this.word.derivations = [];
-          this.word.derivations.push({ derivationId: uuidv4().replace(/-/g, ''), derivation: '', partOfSpeech: '', derivationChinese: '' });
-          this.word.synonyms = [];
-          this.word.synonyms.push({ synonymId: uuidv4().replace(/-/g, ''), synonym: '', partOfSpeech: '', synonymChinese: '' });
-          this.word.antonyms = [];
-          this.word.antonyms.push({ antonymId: uuidv4().replace(/-/g, ''), antonym: '', partOfSpeech: '', antonymChinese: '' });
-          this.word.sentences = [];
-          this.word.sentences.push({ sentenceId: uuidv4().replace(/-/g, ''), sentence: '', sentenceChinese: '' });
-          this.$validator.reset();
+          self.word.wordId = uuidv4().replace(/-/g, '');
+          self.word.word = '';
+          self.word.kkPhoneticSymbols = '';
+          self.word.partOfSpeech = '';
+          self.word.chinese = '';
+          self.word.derivations = [];
+          self.word.derivations.push({ derivationId: uuidv4().replace(/-/g, ''), derivation: '', partOfSpeech: '', derivationChinese: '' });
+          self.word.synonyms = [];
+          self.word.synonyms.push({ synonymId: uuidv4().replace(/-/g, ''), synonym: '', partOfSpeech: '', synonymChinese: '' });
+          self.word.antonyms = [];
+          self.word.antonyms.push({ antonymId: uuidv4().replace(/-/g, ''), antonym: '', partOfSpeech: '', antonymChinese: '' });
+          self.word.sentences = [];
+          self.word.sentences.push({ sentenceId: uuidv4().replace(/-/g, ''), sentence: '', sentenceChinese: '' });
+          self.$validator.reset();
         })
         .catch((e) => {
           // 新增失敗
           noty.close();
 
-          this.$refs.submitBtn.removeAttribute('disabled');
+          self.$refs.submitBtn.removeAttribute('disabled');
 
           if (e === 'Repeat') {
             new Noty({
@@ -455,21 +457,21 @@ export default {
     },
   },
   mounted() {
-    const _this = this;
-    $('[data-showName]').on('shown.bs.collapse', function (e) {
+    const self = this;
+    $('[data-showName]').on('shown.bs.collapse', (e) => {
       let name = e.target.getAttribute('data-showName');
       if (!name) {
         name = e.target.parentElement.getAttribute('data-showName');
       }
-      _this[name] = true;
+      self[name] = true;
     });
 
-    $('[data-showName]').on('hidden.bs.collapse', function (e) {
+    $('[data-showName]').on('hidden.bs.collapse', (e) => {
       let name = e.target.getAttribute('data-showName');
       if (!name) {
         name = e.target.parentElement.getAttribute('data-showName');
       }
-      _this[name] = false;
+      self[name] = false;
     });
   },
 };
