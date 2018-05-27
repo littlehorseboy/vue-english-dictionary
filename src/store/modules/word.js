@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import Axios from 'axios';
+import qs from 'qs';
 
 /*
   這邊可以改為用 types 物件取代 matutions_type.js (繼續用也可以)
@@ -105,12 +106,26 @@ const getters = {
 // actions 也是以 Object 形式建構
 const actions = {
   getWords({ commit }) {
+    // Axios({
+    //   method: 'get',
+    //   url: 'http://localhost:3001/api/items',
+    // }).then((response) => {
+    //   const data = response.data;
+    //   commit(types.GET_WORDS, data);
+    // });
+
     Axios({
-      method: 'get',
-      url: 'http://localhost:3001/api/items',
+      method: 'post',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+      url: 'http://175.182.98.165:8080/API/englishDictionary.ashx?collection=get',
     }).then((response) => {
       const data = response.data;
       commit(types.GET_WORDS, data);
+
+    }).catch((e) => {
+      console.log(e);
     });
   },
 
@@ -195,10 +210,27 @@ const actions = {
         const updateWords = state.updateWords;
 
         if (deleteWords.length > 0) {
+          // Axios({
+          //   method: 'delete',
+          //   url: 'http://localhost:3001/api/items',
+          //   data: deleteWords,
+          // }).then((response) => {
+          //   commit(types.DELETE_SPLICE_WORD, deleteWords);
+          //   commit(types.CLEAR_DELETEWORDS);
+
+          //   checkAxiosCount3();
+          // }).catch((e) => {
+          //   console.log(e);
+          //   checkAxiosCount3();
+          // });
+
           Axios({
-            method: 'delete',
-            url: 'http://localhost:3001/api/items',
-            data: deleteWords,
+            method: 'post',
+            headers: {
+              'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            },
+            url: 'http://175.182.98.165:8080/API/englishDictionary.ashx?collection=delete',
+            data: qs.stringify({ words: JSON.stringify(deleteWords) }),
           }).then((response) => {
             commit(types.DELETE_SPLICE_WORD, deleteWords);
             commit(types.CLEAR_DELETEWORDS);
@@ -213,10 +245,26 @@ const actions = {
         }
 
         if (createWords.length > 0) {
+          // Axios({
+          //   method: 'post',
+          //   url: 'http://localhost:3001/api/items',
+          //   data: createWords,
+          // }).then((response) => {
+          //   commit(types.CLEAR_CREATEWORDS);
+
+          //   checkAxiosCount3();
+          // }).catch((e) => {
+          //   console.log(e);
+          //   checkAxiosCount3();
+          // });
+
           Axios({
             method: 'post',
-            url: 'http://localhost:3001/api/items',
-            data: createWords,
+            headers: {
+              'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            },
+            url: 'http://175.182.98.165:8080/API/englishDictionary.ashx?collection=post',
+            data: qs.stringify({ words: JSON.stringify(createWords) }),
           }).then((response) => {
             commit(types.CLEAR_CREATEWORDS);
 
@@ -230,10 +278,26 @@ const actions = {
         }
 
         if (updateWords.length > 0) {
+          // Axios({
+          //   method: 'put',
+          //   url: 'http://localhost:3001/api/items',
+          //   data: updateWords,
+          // }).then((response) => {
+          //   commit(types.CLEAR_UPDATEWORDS);
+
+          //   checkAxiosCount3();
+          // }).catch((e) => {
+          //   console.log(e);
+          //   checkAxiosCount3();
+          // });
+
           Axios({
-            method: 'put',
-            url: 'http://localhost:3001/api/items',
-            data: updateWords,
+            method: 'post',
+            headers: {
+              'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            },
+            url: 'http://175.182.98.165:8080/API/englishDictionary.ashx?collection=put',
+            data: qs.stringify({ words: JSON.stringify(updateWords) }),
           }).then((response) => {
             commit(types.CLEAR_UPDATEWORDS);
 

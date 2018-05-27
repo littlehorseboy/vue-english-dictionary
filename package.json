@@ -23,6 +23,7 @@
     "noty": "^3.2.0-beta",
     "open-iconic": "^1.1.1",
     "popper.js": "^1.14.3",
+    "qs": "^6.5.2",
     "uuid": "^3.2.1",
     "vee-validate": "^2.0.9",
     "vue": "^2.5.2",
