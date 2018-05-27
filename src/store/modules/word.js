@@ -181,6 +181,15 @@ const actions = {
         || state.updateWords.length > 0) {
         commit(types.SUBMIT_WORDS);
 
+        let axiosCount = 0;
+        const checkAxiosCount3 = () => {
+          axiosCount += 1;
+
+          if (axiosCount === 3) {
+            resolve();
+          }
+        };
+
         const deleteWords = state.deleteWords;
         const createWords = state.createWords;
         const updateWords = state.updateWords;
@@ -191,10 +200,16 @@ const actions = {
             url: 'http://localhost:3001/api/items',
             data: deleteWords,
           }).then((response) => {
-            debugger;
             commit(types.DELETE_SPLICE_WORD, deleteWords);
             commit(types.CLEAR_DELETEWORDS);
+
+            checkAxiosCount3();
+          }).catch((e) => {
+            console.log(e);
+            checkAxiosCount3();
           });
+        } else {
+          checkAxiosCount3();
         }
 
         if (createWords.length > 0) {
@@ -204,7 +219,14 @@ const actions = {
             data: createWords,
           }).then((response) => {
             commit(types.CLEAR_CREATEWORDS);
+
+            checkAxiosCount3();
+          }).catch((e) => {
+            console.log(e);
+            checkAxiosCount3();
           });
+        } else {
+          checkAxiosCount3();
         }
 
         if (updateWords.length > 0) {
@@ -213,12 +235,16 @@ const actions = {
             url: 'http://localhost:3001/api/items',
             data: updateWords,
           }).then((response) => {
-            debugger;
             commit(types.CLEAR_UPDATEWORDS);
-          });
-        }
 
-        resolve();
+            checkAxiosCount3();
+          }).catch((e) => {
+            console.log(e);
+            checkAxiosCount3();
+          });
+        } else {
+          checkAxiosCount3();
+        }
       } else {
         reject('沒有需要儲存的資料!');
       }
