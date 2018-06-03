@@ -6,7 +6,7 @@
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="insertWord">Word</label>
-          <input v-model="word.word" v-validate="'required'" name="insertWord" data-vv-as="英文單字"
+          <input v-model="addressWord.word" v-validate="'required'" name="insertWord" data-vv-as="英文單字"
             :class="[errors.first('insertWord') ? 'is-invalid' : 'is-valid']" class="form-control" id="insertWord" placeholder="英文單字">
           <div class="invalid-feedback">{{ errors.first('insertWord') }}</div>
         </div>
@@ -326,7 +326,26 @@ export default {
       derivationsShow: false,
       synonymsShow: false,
       antonymsShow: false,
+      wordsss: null,
     };
+  },
+  props: {
+    addressWord: Object,
+  },
+  watch: {
+    wordsss:() => {
+      debugger;
+      this.word = _.cloneDeep(this.addressWord); // 修改專用
+    },
+  },
+  computed: {
+    wordsss:() => {
+      debugger;
+      this.word = _.cloneDeep(this.addressWord); // 修改專用
+    },
+  },
+  created() {
+    this.word = this.addressWord; // 修改專用
   },
   methods: {
     validateBeforeSubmit() {

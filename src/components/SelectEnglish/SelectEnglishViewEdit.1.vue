@@ -358,9 +358,6 @@ export default {
         }).show();
       }
     },
-    updateModal() {
-      this.$emit('updateModal');
-    },
   },
   computed: {
     ...mapGetters({

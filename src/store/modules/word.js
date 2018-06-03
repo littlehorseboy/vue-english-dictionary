@@ -138,26 +138,16 @@ const actions = {
           if (findRepeat) {
             reject('Repeat');
           } else {
-            newTodo.sentences.forEach((sentence, index, object) => {
-              if (!sentence.sentence) {
-                object.splice(index, 1);
-              }
-            });
-            newTodo.derivations.forEach((derivation, index, object) => {
-              if (!derivation.derivation) {
-                object.splice(index, 1);
-              }
-            });
-            newTodo.synonyms.forEach((synonym, index, object) => {
-              if (!synonym.synonym) {
-                object.splice(index, 1);
-              }
-            });
-            newTodo.antonyms.forEach((antonym, index, object) => {
-              if (!antonym.antonym) {
-                object.splice(index, 1);
-              }
-            });
+            // newTodo.sentences.forEach((sentence, index, object) => {
+            //   if (!sentence.sentence) {
+            //     object.splice(index, 1);
+            //   }
+            // });
+            newTodo.sentences = newTodo.sentences.filter(obj => obj.sentence !== '');
+            newTodo.derivations = newTodo.derivations.filter(obj => obj.derivation !== '');
+            newTodo.synonyms = newTodo.synonyms.filter(obj => obj.synonym !== '');
+            newTodo.antonyms = newTodo.antonyms.filter(obj => obj.antonym !== '');
+
             commit(types.CREATE_WORD, newTodo);
             resolve();
           }

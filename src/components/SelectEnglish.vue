@@ -1,6 +1,8 @@
 <template>
   <div class="pt-3">
-    <h4>說明</h4>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#InsertEnglishModal">新增</button>
+
+    <h4 @click="updateWordModal">說明</h4>
     <div class="row mb-4">
       <div class="col-md-3">
         <div class="h5 text-success">英文單字</div>
@@ -55,12 +57,54 @@
     </div>
 
     <div class="position-fixed" style="bottom: 2rem; right: 2rem; z-index: 1;">
-      <button @click="submitWords" class="btn btn-primary">保存</button>
+      <button @click="submitWords" class="btn btn-dark">保存</button>
     </div>
 
     <h4 class="clear">自建字庫</h4>
     <div v-for="word in words" :key="word.wordId">
-      <SelectEnglishViewEdit :addressWord="word" :editBtnShow="editBtnShow"></SelectEnglishViewEdit>
+      <SelectEnglishViewEdit :addressWord="word" :editBtnShow="editBtnShow" v-on:updateModal="updateWordModal(word)"></SelectEnglishViewEdit>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="InsertEnglishModal" tabindex="-1" role="dialog" aria-labelledby="InsertEnglishModal" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="InsertEnglishModalLabel">新增單字</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <InsertEnglish></InsertEnglish>
+          </div>
+          <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="UpdateEnglishModal" tabindex="-1" role="dialog" aria-labelledby="UpdateEnglishModal" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="UpdateEnglishModalLabel">新增單字</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <UpdateEnglish :addressWord="updateWord"></UpdateEnglish>
+          </div>
+          <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div> -->
+        </div>
+      </div>
     </div>
 
     <pre>words</pre>
@@ -75,17 +119,21 @@
 </template>
 
 <script>
+import $ from 'jquery';
 import Noty from 'noty';
 import { mapGetters, mapActions } from 'vuex';
 import 'noty/src/noty.scss';
 import 'noty/src/themes/relax.scss';
 import SelectEnglishViewEdit from './SelectEnglish/SelectEnglishViewEdit';
+import InsertEnglish from './InsertEnglish';
+import UpdateEnglish from './UpdateEnglish';
 
 export default {
   name: 'SelectEnglish',
   data() {
     return {
       editBtnShow: true,
+      updateWord: null,
     };
   },
   computed: {
@@ -135,9 +183,21 @@ export default {
           }).show();
         });
     },
+    //
+    updateWordModal(word) {
+      this.updateWord = word;
+      $('#UpdateEnglishModal').modal('show');
+    },
   },
   components: {
     SelectEnglishViewEdit,
+    InsertEnglish,
+    UpdateEnglish,
+  },
+  created() {
+    if (this.words.length === 0) {
+      this.$store.dispatch('getWords');
+    }
   },
 };
 </script>

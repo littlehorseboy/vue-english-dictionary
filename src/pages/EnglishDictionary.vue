@@ -36,9 +36,6 @@ export default {
     return {
     };
   },
-  created() {
-    this.$store.dispatch('getWords');
-  },
 };
 </script>
 
