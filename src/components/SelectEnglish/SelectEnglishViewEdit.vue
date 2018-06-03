@@ -105,7 +105,7 @@
     <!-- end 編輯模式 -->
 
     <div v-if="!editBtnShow" class="col-md-1">
-      <button @click="editModeChange" type="button" class="btn btn-sm btn-primary" :disabled="deleteWordCheck">
+      <button @click="updateModal" type="button" class="btn btn-sm btn-primary" :disabled="deleteWordCheck">
         <span :class="[!editMode ? 'oi-pencil' : 'oi-circle-check']" class="oi" aria-hidden="true"></span> {{ !editMode ? '編輯' : '完成' }}
       </button>
       <button @click="deleteWord" type="button" class="btn btn-sm btn-danger" :disabled="deleteWordCheck">

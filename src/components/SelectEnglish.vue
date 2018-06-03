@@ -2,7 +2,7 @@
   <div class="pt-3">
     <button class="btn btn-primary" data-toggle="modal" data-target="#InsertEnglishModal">新增</button>
 
-    <h4 @click="updateWordModal">說明</h4>
+    <h4>說明</h4>
     <div class="row mb-4">
       <div class="col-md-3">
         <div class="h5 text-success">英文單字</div>
@@ -62,7 +62,7 @@
 
     <h4 class="clear">自建字庫</h4>
     <div v-for="word in words" :key="word.wordId">
-      <SelectEnglishViewEdit :addressWord="word" :editBtnShow="editBtnShow" v-on:updateModal="updateWordModal(word)"></SelectEnglishViewEdit>
+      <SelectEnglishViewEdit :addressWord="word" :editBtnShow="editBtnShow" @updateModal="updateWordModal(word)"></SelectEnglishViewEdit>
     </div>
 
     <!-- Modal -->
@@ -133,7 +133,7 @@ export default {
   data() {
     return {
       editBtnShow: true,
-      updateWord: null,
+      updateWord: {},
     };
   },
   computed: {

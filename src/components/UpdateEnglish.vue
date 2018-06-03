@@ -297,53 +297,47 @@ import 'noty/src/themes/relax.scss';
 const uuidv4 = require('uuid/v4');
 
 export default {
-  name: 'InsertEnglish',
+  name: 'UpdateEnglish',
   data() {
     return {
-      word: {
-        wordId: uuidv4().replace(/-/g, ''),
-        word: '',
-        kkPhoneticSymbols: '',
-        partOfSpeech: '',
-        chinese: '',
-        // 衍生詞
-        derivations: [
-          { derivationId: uuidv4().replace(/-/g, ''), derivation: '', partOfSpeech: '', derivationChinese: '' },
-        ],
-        // 同義詞
-        synonyms: [
-          { synonymId: uuidv4().replace(/-/g, ''), synonym: '', partOfSpeech: '', synonymChinese: '' },
-        ],
-        // 反義詞
-        antonyms: [
-          { antonymId: uuidv4().replace(/-/g, ''), antonym: '', partOfSpeech: '', antonymChinese: '' },
-        ],
-        sentences: [
-          { sentenceId: uuidv4().replace(/-/g, ''), sentence: '', sentenceChinese: '' },
-        ],
-      },
+      word: null,
+      // word: {
+      //   wordId: uuidv4().replace(/-/g, ''),
+      //   word: '',
+      //   kkPhoneticSymbols: '',
+      //   partOfSpeech: '',
+      //   chinese: '',
+      //   // 衍生詞
+      //   derivations: [
+      //     { derivationId: uuidv4().replace(/-/g, ''), derivation: '', partOfSpeech: '', derivationChinese: '' },
+      //   ],
+      //   // 同義詞
+      //   synonyms: [
+      //     { synonymId: uuidv4().replace(/-/g, ''), synonym: '', partOfSpeech: '', synonymChinese: '' },
+      //   ],
+      //   // 反義詞
+      //   antonyms: [
+      //     { antonymId: uuidv4().replace(/-/g, ''), antonym: '', partOfSpeech: '', antonymChinese: '' },
+      //   ],
+      //   sentences: [
+      //     { sentenceId: uuidv4().replace(/-/g, ''), sentence: '', sentenceChinese: '' },
+      //   ],
+      // },
       sentencesShow: false,
       derivationsShow: false,
       synonymsShow: false,
       antonymsShow: false,
-      wordsss: null,
+      // wordsss: null,
     };
   },
   props: {
     addressWord: Object,
   },
-  watch: {
-    wordsss:() => {
-      debugger;
-      this.word = _.cloneDeep(this.addressWord); // 修改專用
-    },
-  },
-  computed: {
-    wordsss:() => {
-      debugger;
-      this.word = _.cloneDeep(this.addressWord); // 修改專用
-    },
-  },
+  // watch: {
+  //   addressWord:() => {
+  //     this.word = _.cloneDeep(this.addressWord); // 修改專用
+  //   },
+  // },
   created() {
     this.word = this.addressWord; // 修改專用
   },
