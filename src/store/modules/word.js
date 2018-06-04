@@ -123,7 +123,6 @@ const actions = {
     }).then((response) => {
       const data = response.data;
       commit(types.GET_WORDS, data);
-
     }).catch((e) => {
       console.log(e);
     });
@@ -376,7 +375,7 @@ const mutations = {
       // 新增陣列內 如果在 刪除陣列 有相同的 Id "刪除 新增 修改"均作廢刪除
       if (deleteWords.findIndex(deleteWord => deleteWord === createWord.wordId) !== -1) {
         deleteWords.splice(deleteWords.findIndex(deleteWord => deleteWord === createWord.wordId), 1);
-        createWords.splice(createWords.findIndex(createWord => createWord.wordId === createWord.wordId), 1);
+        createWords.splice(createWords.findIndex(word => word.wordId === createWord.wordId), 1);
         updateWords.splice(updateWords.findIndex(updateWord => updateWord.wordId === createWord.wordId), 1);
         state.words.splice(state.words.findIndex(word => word.wordId === createWord.wordId), 1);
       }

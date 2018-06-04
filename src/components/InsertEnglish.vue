@@ -280,8 +280,8 @@
       </div>
     </div>
 
-    <!-- <pre>word:</pre>
-    <pre>{{ word }}</pre> -->
+    <pre>word:</pre>
+    <pre>{{ word }}</pre>
   </div>
 </template>
 

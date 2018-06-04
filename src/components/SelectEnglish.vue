@@ -97,7 +97,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <UpdateEnglish :addressWord="updateWord"></UpdateEnglish>
+            <UpdateEnglish :word="updateWord"></UpdateEnglish>
           </div>
           <!-- <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -127,6 +127,8 @@ import 'noty/src/themes/relax.scss';
 import SelectEnglishViewEdit from './SelectEnglish/SelectEnglishViewEdit';
 import InsertEnglish from './InsertEnglish';
 import UpdateEnglish from './UpdateEnglish';
+
+const uuidv4 = require('uuid/v4');
 
 export default {
   name: 'SelectEnglish',
@@ -183,9 +185,40 @@ export default {
           }).show();
         });
     },
-    //
+    // 將 update 專屬的 modal 填入 word 並打開
     updateWordModal(word) {
-      this.updateWord = word;
+      this.updateWord = _.cloneDeep(word);
+      if (this.updateWord.derivations.length === 0) {
+        this.updateWord.derivations.push({
+          derivationId: uuidv4().replace(/-/g, ''),
+          derivation: '',
+          partOfSpeech: '',
+          derivationChinese: '',
+        });
+      }
+      if (this.updateWord.synonyms.length === 0) {
+        this.updateWord.synonyms.push({
+          synonymId: uuidv4().replace(/-/g, ''),
+          synonym: '',
+          partOfSpeech: '',
+          synonymChinese: '',
+        });
+      }if (this.updateWord.antonyms.length === 0) {
+        this.updateWord.antonyms.push({
+          antonymId: uuidv4().replace(/-/g, ''),
+          antonym: '',
+          partOfSpeech: '',
+          antonymChinese: '',
+        });
+      }
+      if (this.updateWord.sentences.length === 0) {
+        this.updateWord.sentences.push({
+          sentenceId: uuidv4().replace(/-/g, ''),
+          sentence: '',
+          partOfSpeech: '',
+          sentenceChinese: '',
+        });
+      }
       $('#UpdateEnglishModal').modal('show');
     },
   },

@@ -5,16 +5,16 @@
       <!-- 英文單字 -->
       <div class="form-row">
         <div class="form-group col-md-6">
-          <label for="insertWord">Word</label>
-          <input v-model="addressWord.word" v-validate="'required'" name="insertWord" data-vv-as="英文單字"
-            :class="[errors.first('insertWord') ? 'is-invalid' : 'is-valid']" class="form-control" id="insertWord" placeholder="英文單字">
-          <div class="invalid-feedback">{{ errors.first('insertWord') }}</div>
+          <label for="updateWord">Word</label>
+          <input v-model="word.word" v-validate="'required'" name="updateWord" data-vv-as="英文單字"
+            :class="[errors.first('updateWord') ? 'is-invalid' : 'is-valid']" class="form-control" id="updateWord" placeholder="英文單字">
+          <div class="invalid-feedback">{{ errors.first('updateWord') }}</div>
         </div>
         <!-- end 英文單字 -->
         <!-- 詞性 -->
         <div class="form-group col-md-6">
-          <label for="insertPartOfSpeech">Part of speech</label>
-          <select v-model="word.partOfSpeech" class="form-control" id="insertPartOfSpeech">
+          <label for="updatePartOfSpeech">Part of speech</label>
+          <select v-model="word.partOfSpeech" class="form-control" id="updatePartOfSpeech">
             <option value="" disabled>詞性</option>
             <option value="v.">v. (verb)</option>
             <option value="n.">n. (noun)</option>
@@ -31,16 +31,16 @@
         <!-- end 詞性 -->
         <!-- 中文 -->
         <div class="form-group col-md-6">
-          <label for="insertChinese">Chinese</label>
-          <input v-model="word.chinese" class="form-control" id="insertChinese" placeholder="中文">
+          <label for="updateChinese">Chinese</label>
+          <input v-model="word.chinese" class="form-control" id="updateChinese" placeholder="中文">
           <!-- <small class="form-text text-muted">用 , 分隔 不要空格</small> -->
         </div>
         <!-- end 中文 -->
         <!-- K.K.音標 -->
         <div class="form-group col-md-6">
-          <label for="insertKKPhoneticSymbols">K.K. Phonetic Symbols</label>
+          <label for="updateKKPhoneticSymbols">K.K. Phonetic Symbols</label>
           <input v-model="word.kkPhoneticSymbols" class="form-control"
-            id="insertKKPhoneticSymbols" placeholder="K.K.音標">
+            id="updateKKPhoneticSymbols" placeholder="K.K.音標">
         </div>
         <!-- end K.K.音標 -->
       </div>
@@ -48,7 +48,7 @@
       <!-- 例句, 例句中文 -->
       <div class="mb-2">
         <button class="d-inline-block hoverGreen px-2"
-         data-toggle="collapse" data-target="#SentencesDiv" aria-expanded="false" aria-controls="SentencesDiv">
+         data-toggle="collapse" data-target="#updateSentencesDiv" aria-expanded="false" aria-controls="updateSentencesDiv">
           <span class="oi" :class="[sentencesShow ? 'oi-caret-bottom' : 'oi-caret-right']" aria-hidden="true"></span>
           <h3 class="d-inline">
             例句
@@ -56,19 +56,19 @@
         </button>
       </div>
 
-      <div id="SentencesDiv" class="mb-2 pt-2 row collapse grayDashed" data-showName="sentencesShow">
+      <div id="updateSentencesDiv" class="mb-2 pt-2 row collapse grayDashed" data-showName="sentencesShow">
         <div v-for="(sentence, index) in word.sentences" :key="index"
           class="col-md-12">
           <div class="form-group">
-            <label for="insertSentences">Sentences</label>
-            <input v-model="sentence.sentence" class="form-control" id="insertSentences" placeholder="例句">
+            <label for="updateSentences">Sentences</label>
+            <input v-model="sentence.sentence" class="form-control" id="updateSentences" placeholder="例句">
             <small v-if="index === 0" class="form-text text-muted mb-2">
               ex. Companies must distribute health insurance policies to all workers.
             </small>
           </div>
           <div class="form-group">
-            <label for="insertSentencesChinese">Sentences Chinese</label>
-            <input v-model="sentence.sentenceChinese" class="form-control" id="insertSentencesChinese" placeholder="例句中文">
+            <label for="updateSentencesChinese">Sentences Chinese</label>
+            <input v-model="sentence.sentenceChinese" class="form-control" id="updateSentencesChinese" placeholder="例句中文">
             <small v-if="index === 0" class="form-text text-muted mb-2">
               ex. 公司應該將健康保險單發給所有員工。
             </small>
@@ -90,7 +90,7 @@
       <!-- 衍生詞 (多筆) -->
       <div class="mb-2">
         <button class="d-inline-block hoverGreen px-2"
-         data-toggle="collapse" data-target="#DerivationsDiv" aria-expanded="false" aria-controls="DerivationsDiv">
+         data-toggle="collapse" data-target="#updateDerivationsDiv" aria-expanded="false" aria-controls="updateDerivationsDiv">
           <span class="oi" :class="[derivationsShow ? 'oi-caret-bottom' : 'oi-caret-right']" aria-hidden="true"></span>
           <h3 class="d-inline">
             衍生詞
@@ -98,17 +98,17 @@
         </button>
       </div>
 
-      <div id="DerivationsDiv" class="mb-2 pt-2 row collapse grayDashed" data-showName="derivationsShow">
+      <div id="updateDerivationsDiv" class="mb-2 pt-2 row collapse grayDashed" data-showName="derivationsShow">
         <div v-for="(derivation, index) in word.derivations" :key="`derivation_${index}`"
           class="col-md-12">
           <div class="form-row">
             <div class="form-group col-md-4">
-              <label for="insertDerivation">Derivation</label>
-              <input v-model="derivation.derivation" class="form-control" id="insertDerivation" placeholder="衍生詞英文單字">
+              <label for="updateDerivation">Derivation</label>
+              <input v-model="derivation.derivation" class="form-control" id="updateDerivation" placeholder="衍生詞英文單字">
             </div>
             <div class="form-group col-md-4">
-              <label for="insertDerivationPartOfSpeech">Derivation part of speech</label>
-              <select v-model="derivation.partOfSpeech" class="form-control" id="insertDerivationPartOfSpeech">
+              <label for="updateDerivationPartOfSpeech">Derivation part of speech</label>
+              <select v-model="derivation.partOfSpeech" class="form-control" id="updateDerivationPartOfSpeech">
                 <option value="" disabled>詞性</option>
                 <option value="v.">v. (verb)</option>
                 <option value="n.">n. (noun)</option>
@@ -117,11 +117,11 @@
                 <option value="prep.">prep. (preposition)</option>
                 <option value="phr.">phr. (phrase)</option>
               </select>
-              <!-- <input v-model="derivation.partOfSpeech" class="form-control" id="insertDerivationPartOfSpeech" placeholder="詞性"> -->
+              <!-- <input v-model="derivation.partOfSpeech" class="form-control" id="updateDerivationPartOfSpeech" placeholder="詞性"> -->
             </div>
             <div class="form-group col-md-4">
-              <label for="insertDerivationChinese">Derivation Chinese</label>
-              <input v-model="derivation.derivationChinese" class="form-control" id="insertDerivationChinese" placeholder="中文">
+              <label for="updateDerivationChinese">Derivation Chinese</label>
+              <input v-model="derivation.derivationChinese" class="form-control" id="updateDerivationChinese" placeholder="中文">
             </div>
           </div>
 
@@ -142,7 +142,7 @@
       <!-- 同義詞 (多筆) -->
       <div class="mb-2">
         <button class="d-inline-block hoverGreen px-2"
-         data-toggle="collapse" data-target="#SynonymsDiv" aria-expanded="false" aria-controls="SynonymsDiv">
+         data-toggle="collapse" data-target="#updateSynonymsDiv" aria-expanded="false" aria-controls="updateSynonymsDiv">
           <span class="oi" :class="[synonymsShow ? 'oi-caret-bottom' : 'oi-caret-right']" aria-hidden="true"></span>
           <h3 class="d-inline">
             同義詞
@@ -150,17 +150,17 @@
         </button>
       </div>
 
-      <div id="SynonymsDiv" class="mb-2 pt-2 row collapse grayDashed" data-showName="synonymsShow">
+      <div id="updateSynonymsDiv" class="mb-2 pt-2 row collapse grayDashed" data-showName="synonymsShow">
         <div v-for="(synonym, index) in word.synonyms" :key="`synonym_${index}`"
           class="col-md-12">
           <div class="form-row">
             <div class="form-group col-md-4">
-              <label for="insertSynonym">Synonym</label>
-              <input v-model="synonym.synonym" class="form-control" id="insertSynonym" placeholder="同義詞英文單字">
+              <label for="updateSynonym">Synonym</label>
+              <input v-model="synonym.synonym" class="form-control" id="updateSynonym" placeholder="同義詞英文單字">
             </div>
             <div class="form-group col-md-4">
-              <label for="insertSynonymPartOfSpeech">Synonym part of speech</label>
-              <select v-model="synonym.partOfSpeech" class="form-control" id="insertSynonymPartOfSpeech">
+              <label for="updateSynonymPartOfSpeech">Synonym part of speech</label>
+              <select v-model="synonym.partOfSpeech" class="form-control" id="updateSynonymPartOfSpeech">
                 <option value="" disabled>詞性</option>
                 <option value="v.">v. (verb)</option>
                 <option value="n.">n. (noun)</option>
@@ -169,11 +169,11 @@
                 <option value="prep.">prep. (preposition)</option>
                 <option value="phr.">phr. (phrase)</option>
               </select>
-              <!-- <input v-model="synonym.partOfSpeech" class="form-control" id="insertSynonymPartOfSpeech" placeholder="詞性"> -->
+              <!-- <input v-model="synonym.partOfSpeech" class="form-control" id="updateSynonymPartOfSpeech" placeholder="詞性"> -->
             </div>
             <div class="form-group col-md-4">
-              <label for="insertSynonymChinese">Synonym Chinese</label>
-              <input v-model="synonym.synonymChinese" class="form-control" id="insertSynonymChinese" placeholder="中文">
+              <label for="updateSynonymChinese">Synonym Chinese</label>
+              <input v-model="synonym.synonymChinese" class="form-control" id="updateSynonymChinese" placeholder="中文">
             </div>
           </div>
           <div class="form-group text-center">
@@ -193,7 +193,7 @@
       <!-- 反義詞 (多筆) -->
       <div class="mb-2">
         <button class="d-inline-block hoverGreen px-2"
-         data-toggle="collapse" data-target="#AntonymsDiv" aria-expanded="false" aria-controls="AntonymsDiv">
+         data-toggle="collapse" data-target="#updateAntonymsDiv" aria-expanded="false" aria-controls="updateAntonymsDiv">
           <span class="oi" :class="[antonymsShow ? 'oi-caret-bottom' : 'oi-caret-right']" aria-hidden="true"></span>
           <h3 class="d-inline">
             反義詞
@@ -201,17 +201,17 @@
         </button>
       </div>
 
-      <div id="AntonymsDiv" class="mb-2 pt-2 row collapse grayDashed" data-showName="antonymsShow">
+      <div id="updateAntonymsDiv" class="mb-2 pt-2 row collapse grayDashed" data-showName="antonymsShow">
         <div v-for="(antonym, index) in word.antonyms" :key="`antonym_${index}`"
           class="col-md-12">
           <div class="form-row">
             <div class="form-group col-md-4">
-              <label for="insertAntonym">Antonym</label>
-              <input v-model="antonym.antonym" class="form-control" id="insertAntonym" placeholder="反義詞英文單字">
+              <label for="updateAntonym">Antonym</label>
+              <input v-model="antonym.antonym" class="form-control" id="updateAntonym" placeholder="反義詞英文單字">
             </div>
             <div class="form-group col-md-4">
-              <label for="insertAntonymPartOfSpeech">Antonym part of speech</label>
-              <select v-model="antonym.partOfSpeech" class="form-control" id="insertAntonymPartOfSpeech">
+              <label for="updateAntonymPartOfSpeech">Antonym part of speech</label>
+              <select v-model="antonym.partOfSpeech" class="form-control" id="updateAntonymPartOfSpeech">
                 <option value="" disabled>詞性</option>
                 <option value="v.">v. (verb)</option>
                 <option value="n.">n. (noun)</option>
@@ -220,11 +220,11 @@
                 <option value="prep.">prep. (preposition)</option>
                 <option value="phr.">phr. (phrase)</option>
               </select>
-              <!-- <input v-model="antonym.partOfSpeech" class="form-control" id="insertAntonymPartOfSpeech" placeholder="詞性"> -->
+              <!-- <input v-model="antonym.partOfSpeech" class="form-control" id="updateAntonymPartOfSpeech" placeholder="詞性"> -->
             </div>
             <div class="form-group col-md-4">
-              <label for="insertAntonymChinese">Antonym Chinese</label>
-              <input v-model="antonym.antonymChinese" class="form-control" id="insertAntonymChinese" placeholder="中文">
+              <label for="updateAntonymChinese">Antonym Chinese</label>
+              <input v-model="antonym.antonymChinese" class="form-control" id="updateAntonymChinese" placeholder="中文">
             </div>
           </div>
           <div class="form-group text-center">
@@ -280,8 +280,8 @@
       </div>
     </div>
 
-    <!-- <pre>word:</pre>
-    <pre>{{ word }}</pre> -->
+    <pre>word:</pre>
+    <pre>{{ word }}</pre>
   </div>
 </template>
 
@@ -300,46 +300,14 @@ export default {
   name: 'UpdateEnglish',
   data() {
     return {
-      word: null,
-      // word: {
-      //   wordId: uuidv4().replace(/-/g, ''),
-      //   word: '',
-      //   kkPhoneticSymbols: '',
-      //   partOfSpeech: '',
-      //   chinese: '',
-      //   // 衍生詞
-      //   derivations: [
-      //     { derivationId: uuidv4().replace(/-/g, ''), derivation: '', partOfSpeech: '', derivationChinese: '' },
-      //   ],
-      //   // 同義詞
-      //   synonyms: [
-      //     { synonymId: uuidv4().replace(/-/g, ''), synonym: '', partOfSpeech: '', synonymChinese: '' },
-      //   ],
-      //   // 反義詞
-      //   antonyms: [
-      //     { antonymId: uuidv4().replace(/-/g, ''), antonym: '', partOfSpeech: '', antonymChinese: '' },
-      //   ],
-      //   sentences: [
-      //     { sentenceId: uuidv4().replace(/-/g, ''), sentence: '', sentenceChinese: '' },
-      //   ],
-      // },
       sentencesShow: false,
       derivationsShow: false,
       synonymsShow: false,
       antonymsShow: false,
-      // wordsss: null,
     };
   },
   props: {
-    addressWord: Object,
-  },
-  // watch: {
-  //   addressWord:() => {
-  //     this.word = _.cloneDeep(this.addressWord); // 修改專用
-  //   },
-  // },
-  created() {
-    this.word = this.addressWord; // 修改專用
+    word: Object,
   },
   methods: {
     validateBeforeSubmit() {
