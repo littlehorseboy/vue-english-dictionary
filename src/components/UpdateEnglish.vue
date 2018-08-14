@@ -289,7 +289,7 @@
 import $ from 'jquery';
 import _ from 'lodash';
 import Noty from 'noty';
-import { mapGetters, mapActions } from 'vuex';
+// import { mapGetters, mapActions } from 'vuex';
 import 'animate.css';
 import 'noty/src/noty.scss';
 import 'noty/src/themes/relax.scss';

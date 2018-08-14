@@ -111,10 +111,12 @@
       <button @click="deleteWord" type="button" class="btn btn-sm btn-danger" :disabled="deleteWordCheck">
         <span class="oi oi-circle-x" aria-hidden="true"></span> 刪除
       </button>
-      <button v-if="!originalWordCheck && !deleteWordCheck" @click="previousWord" type="button" class="btn btn-sm btn-primary" :disabled="deleteWordCheck">
+      <button v-if="!originalWordCheck && !deleteWordCheck" @click="previousWord"
+        type="button" class="btn btn-sm btn-primary" :disabled="deleteWordCheck">
         <span class="oi oi-action-redo" aria-hidden="true"></span> 回復
       </button>
-      <button v-if="deleteWordCheck" @click="previousWord('delete')" type="button" class="btn btn-sm btn-primary">
+      <button v-if="deleteWordCheck" @click="previousWord('delete')"
+        type="button" class="btn btn-sm btn-primary">
         <span class="oi oi-action-redo" aria-hidden="true"></span> 回復
       </button>
     </div>
@@ -124,7 +126,7 @@
 <script>
 import Noty from 'noty';
 import _ from 'lodash';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'SelectEnglishViewEdit',

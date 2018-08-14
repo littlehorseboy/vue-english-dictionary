@@ -120,8 +120,9 @@
 
 <script>
 import $ from 'jquery';
+import _ from 'lodash';
 import Noty from 'noty';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 import 'noty/src/noty.scss';
 import 'noty/src/themes/relax.scss';
 import SelectEnglishViewEdit from './SelectEnglish/SelectEnglishViewEdit';
@@ -203,7 +204,8 @@ export default {
           partOfSpeech: '',
           synonymChinese: '',
         });
-      }if (this.updateWord.antonyms.length === 0) {
+      }
+      if (this.updateWord.antonyms.length === 0) {
         this.updateWord.antonyms.push({
           antonymId: uuidv4().replace(/-/g, ''),
           antonym: '',

@@ -220,7 +220,7 @@ const actions = {
             },
             url: 'http://175.182.98.165:8080/API/englishDictionary.ashx?collection=delete',
             data: qs.stringify({ words: JSON.stringify(deleteWords) }),
-          }).then((response) => {
+          }).then(() => {
             commit(types.DELETE_SPLICE_WORD, deleteWords);
             commit(types.CLEAR_DELETEWORDS);
 
@@ -254,7 +254,7 @@ const actions = {
             },
             url: 'http://175.182.98.165:8080/API/englishDictionary.ashx?collection=post',
             data: qs.stringify({ words: JSON.stringify(createWords) }),
-          }).then((response) => {
+          }).then(() => {
             commit(types.CLEAR_CREATEWORDS);
 
             checkAxiosCount3();
@@ -287,7 +287,7 @@ const actions = {
             },
             url: 'http://175.182.98.165:8080/API/englishDictionary.ashx?collection=put',
             data: qs.stringify({ words: JSON.stringify(updateWords) }),
-          }).then((response) => {
+          }).then(() => {
             commit(types.CLEAR_UPDATEWORDS);
 
             checkAxiosCount3();

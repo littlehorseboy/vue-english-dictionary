@@ -53,5 +53,7 @@ module.exports = {
       ignoreStrings: true,
       ignoreTemplateLiterals: true,
     }],
+    // Vuex state
+    'no-shadow': ['error', { 'allow': ['state'] }],
   }
 }
